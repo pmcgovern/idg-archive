@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computerworld Archive Browser</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f0f5; 
+            color: #333;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #2d1b69 0%, #1a3a5c 50%, #1e4d6b 100%);
+            padding: 24px 28px;
+            border-bottom: 3px solid #7c4dff;
+            color: white;
+        }
+        h1 { font-size: 1.9em; margin-bottom: 4px; letter-spacing: -0.5px; }
+        h1 span { color: #b388ff; }
+        .subtitle { color: #b0bec5; font-size: 0.95em; }
+        .stats { 
+            display: flex; 
+            gap: 16px; 
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .stat { 
+            background: rgba(124,77,255,0.2); 
+            padding: 6px 14px; 
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #e8e0ff;
+        }
+        .stat strong { color: #b388ff; }
+
+        .wayback-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1565c0;
+            font-size: 0.7em;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        
+        .controls {
+            background: #fff;
+            padding: 14px 24px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+        .filter-group label { color: #666; font-size: 0.88em; font-weight: 500; }
+        select, input[type="text"] {
+            background: #f5f5fa;
+            border: 1px solid #d0d0e0;
+            color: #333;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        select:focus, input:focus { outline: none; border-color: #7c4dff; box-shadow: 0 0 0 2px rgba(124,77,255,0.15); }
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .search-wrapper input { width: 260px; padding-right: 32px; }
+        .search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: none;
+            padding: 2px 4px;
+            line-height: 1;
+        }
+        .search-clear:hover { color: #7c4dff; }
+        .search-clear.visible { display: block; }
+        
+        .decade-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .decade-pill {
+            background: #eeeef5;
+            border: 1px solid #d8d8e8;
+            color: #555;
+            padding: 5px 13px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.82em;
+            transition: all 0.2s;
+        }
+        .decade-pill:hover { background: #e0dff0; border-color: #7c4dff; }
+        .decade-pill.active { background: #7c4dff; color: white; border-color: #7c4dff; }
+        
+        main { padding: 20px 24px; max-width: 1600px; margin: 0 auto; }
+        
+        #results-info {
+            color: #888;
+            margin-bottom: 16px;
+            font-size: 0.88em;
+        }
+        
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+        
+        .issue-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0ea;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .issue-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(45,27,105,0.12);
+            border-color: #7c4dff;
+        }
+        
+        .issue-header {
+            background: linear-gradient(90deg, #2d1b69, #1a3a5c);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .issue-date {
+            font-weight: 600;
+            color: #b388ff;
+            font-size: 1.05em;
+        }
+        .issue-vol {
+            color: #8899aa;
+            font-size: 0.82em;
+        }
+        
+        .issue-body { padding: 14px 16px; }
+        
+        .headlines {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+        .headlines li {
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f5;
+            font-size: 0.88em;
+            line-height: 1.45;
+            color: #444;
+        }
+        .headlines li:last-child { border-bottom: none; }
+        .no-headlines {
+            color: #aaa;
+            font-style: italic;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+        mark {
+            background: #fff3b0;
+            color: #333;
+            padding: 1px 3px;
+            border-radius: 2px;
+        }
+        
+        .archive-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c4dff, #536dfe);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.84em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .archive-link:hover { 
+            background: linear-gradient(135deg, #651fff, #304ffe);
+            box-shadow: 0 3px 10px rgba(124,77,255,0.3);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #888;
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #7c4dff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .error { color: #e94560; padding: 40px; text-align: center; }
+        
+        #load-more {
+            display: block;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #7c4dff, #536dfe);
+            border: none;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        #load-more:hover { 
+            background: linear-gradient(135deg, #651fff, #304ffe);
+            box-shadow: 0 4px 15px rgba(124,77,255,0.3);
+        }
+        #load-more:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+        
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #999;
+            font-size: 0.82em;
+            border-top: 1px solid #e0e0e8;
+            margin-top: 40px;
+        }
+        footer a { color: #7c4dff; }
+        
+        @media (max-width: 600px) {
+            header { padding: 16px; }
+            h1 { font-size: 1.4em; }
+            .controls { padding: 12px 16px; }
+            .search-wrapper input { width: 180px; }
+            .issues-grid { grid-template-columns: 1fr; }
+            main { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📰 Computerworld <span>Archive Browser</span></h1>
+        <p class="subtitle">IDG's flagship publication • 1967–2026 • Internet Archive + Wayback Machine</p>
+        <div class="stats" id="stats">Loading stats...</div>
+    </header>
+    
+    <div class="controls">
+        <div class="decade-pills" id="decade-pills"></div>
+        <div class="filter-group">
+            <label for="search">Search:</label>
+            <div class="search-wrapper">
+                <input type="text" id="search" placeholder="Search headlines...">
+                <button class="search-clear" id="search-clear" title="Clear search">×</button>
+            </div>
+        </div>
+        <div class="filter-group">
+            <label for="sort">Sort:</label>
+            <select id="sort">
+                <option value="date-asc">Date (oldest first)</option>
+                <option value="date-desc">Date (newest first)</option>
+                <option value="headlines">Most headlines</option>
+            </select>
+        </div>
+    </div>
+    
+    <main>
+        <div id="results-info"></div>
+        <div class="issues-grid" id="issues-grid">
+            <div class="loading">Loading archive data...</div>
+        </div>
+        <button id="load-more" style="display:none;">Load More</button>
+    </main>
+    
+    <footer>
+        Built with data from the <a href="https://archive.org/details/computerworld" target="_blank">Internet Archive Computerworld Collection</a>.
+        All content belongs to its respective rights holders.
+    </footer>
+
+    <script>
+        let allIssues = [];
+        let filteredIssues = [];
+        let displayedCount = 0;
+        let currentSearch = '';
+        const PAGE_SIZE = 50;
+        
+        async function loadData() {
+            try {
+                const response = await fetch('issues_v7.json');
+                if (!response.ok) throw new Error('Failed to load data');
+                allIssues = await response.json();
+                
+                updateStats();
+                buildDecadePills();
+                applyFilters();
+                
+            } catch (err) {
+                document.getElementById('issues-grid').innerHTML = 
+                    `<div class="error">Error loading data: ${err.message}<br><small>Make sure issues_v6.json is in the same directory.</small></div>`;
+            }
+        }
+        
+        function updateStats() {
+            const totalHeadlines = allIssues.reduce((sum, i) => sum + i.headlines.length, 0);
+            const decades = {};
+            allIssues.forEach(i => {
+                const decade = i.date.substring(0, 3) + '0s';
+                decades[decade] = (decades[decade] || 0) + 1;
+            });
+            const yearRange = allIssues.length > 0 
+                ? `${allIssues[0].date.substring(0,4)}–${allIssues[allIssues.length-1].date.substring(0,4)}`
+                : '';
+            
+            document.getElementById('stats').innerHTML = `
+                <span class="stat"><strong>${allIssues.length.toLocaleString()}</strong> issues</span>
+                <span class="stat"><strong>${totalHeadlines.toLocaleString()}</strong> headlines extracted</span>
+                <span class="stat"><strong>${Object.keys(decades).length}</strong> decades covered</span>
+                <span class="stat"><strong>${yearRange}</strong> date range</span>
+            `;
+        }
+        
+        function buildDecadePills() {
+            const decades = {};
+            allIssues.forEach(i => {
+                const decade = i.date.substring(0, 3) + '0s';
+                decades[decade] = (decades[decade] || 0) + 1;
+            });
+            
+            const sorted = Object.entries(decades)
+                .filter(([d]) => d.match(/^(19|20)/))
+                .sort((a, b) => a[0].localeCompare(b[0]));
+            
+            const container = document.getElementById('decade-pills');
+            container.innerHTML = `<button class="decade-pill active" data-decade="all">All</button>`;
+            
+            sorted.forEach(([decade, count]) => {
+                const btn = document.createElement('button');
+                btn.className = 'decade-pill';
+                btn.dataset.decade = decade;
+                btn.textContent = `${decade} (${count})`;
+                container.appendChild(btn);
+            });
+            
+            container.addEventListener('click', e => {
+                if (e.target.classList.contains('decade-pill')) {
+                    container.querySelectorAll('.decade-pill').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    applyFilters();
+                }
+            });
+        }
+        
+        function applyFilters() {
+            const activeDecade = document.querySelector('.decade-pill.active')?.dataset.decade || 'all';
+            currentSearch = document.getElementById('search').value.toLowerCase().trim();
+            const sortBy = document.getElementById('sort').value;
+            
+            // Update clear button visibility
+            const clearBtn = document.getElementById('search-clear');
+            clearBtn.classList.toggle('visible', currentSearch.length > 0);
+            
+            filteredIssues = allIssues.filter(issue => {
+                if (activeDecade !== 'all') {
+                    const issueDecade = issue.date.substring(0, 3) + '0s';
+                    if (issueDecade !== activeDecade) return false;
+                }
+                if (currentSearch) {
+                    const headlineText = issue.headlines.join(' ').toLowerCase();
+                    if (!headlineText.includes(currentSearch)) return false;
+                }
+                return true;
+            });
+            
+            filteredIssues.sort((a, b) => {
+                if (sortBy === 'date-asc') return a.date.localeCompare(b.date);
+                if (sortBy === 'date-desc') return b.date.localeCompare(a.date);
+                if (sortBy === 'headlines') return b.headlines.length - a.headlines.length;
+                return 0;
+            });
+            
+            displayedCount = 0;
+            document.getElementById('issues-grid').innerHTML = '';
+            
+            if (filteredIssues.length === 0) {
+                document.getElementById('issues-grid').innerHTML = 
+                    `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;">No issues found matching your criteria.</div>`;
+            }
+            
+            loadMore();
+            updateResultsInfo();
+        }
+        
+        function updateResultsInfo() {
+            const info = document.getElementById('results-info');
+            const shown = Math.min(displayedCount, filteredIssues.length);
+            info.textContent = `Showing ${shown.toLocaleString()} of ${filteredIssues.length.toLocaleString()} issues`;
+        }
+        
+        function loadMore() {
+            const grid = document.getElementById('issues-grid');
+            const endIndex = Math.min(displayedCount + PAGE_SIZE, filteredIssues.length);
+            
+            for (let i = displayedCount; i < endIndex; i++) {
+                grid.appendChild(createIssueCard(filteredIssues[i]));
+            }
+            
+            displayedCount = endIndex;
+            updateResultsInfo();
+            
+            const loadMoreBtn = document.getElementById('load-more');
+            if (displayedCount < filteredIssues.length) {
+                loadMoreBtn.style.display = 'block';
+                loadMoreBtn.textContent = `Load More (${(filteredIssues.length - displayedCount).toLocaleString()} remaining)`;
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+        
+        function highlightText(text, search) {
+            if (!search) return escapeHtml(text);
+            const escaped = escapeHtml(text);
+            const searchEscaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${searchEscaped})`, 'gi');
+            return escaped.replace(regex, '<mark>$1</mark>');
+        }
+        
+        function createIssueCard(issue) {
+            const card = document.createElement('div');
+            card.className = 'issue-card';
+            
+            const dateObj = new Date(issue.date + 'T00:00:00');
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            
+            const volIssue = issue.volume && issue.issue 
+                ? `Vol. ${issue.volume}, No. ${issue.issue}`
+                : issue.volume ? `Vol. ${issue.volume}` : '';
+            
+            let headlinesHtml;
+            if (issue.headlines.length > 0) {
+                // When searching, show only matching headlines
+                let displayHeadlines = issue.headlines;
+                if (currentSearch) {
+                    displayHeadlines = issue.headlines.filter(h => 
+                        h.toLowerCase().includes(currentSearch)
+                    );
+                    if (displayHeadlines.length === 0) displayHeadlines = issue.headlines.slice(0, 3);
+                }
+                
+                headlinesHtml = `<ul class="headlines">
+                    ${displayHeadlines.slice(0, 5).map(h => `<li>${highlightText(h, currentSearch)}</li>`).join('')}
+                    ${displayHeadlines.length > 5 ? `<li style="color:#999">+ ${displayHeadlines.length - 5} more...</li>` : ''}
+                </ul>`;
+            } else {
+                headlinesHtml = `<p class="no-headlines">No headlines extracted</p>`;
+            }
+            
+            card.innerHTML = `
+                <div class="issue-header">
+                    <span class="issue-date">${formattedDate}</span>
+                    <span class="issue-vol">${volIssue}</span>
+                </div>
+                <div class="issue-body">
+                    ${headlinesHtml}
+                    <a href="${issue.url}" target="_blank" rel="noopener" class="archive-link">
+                        📚 View on Archive.org
+                    </a>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function debounce(fn, delay) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn(...args), delay);
+            };
+        }
+        
+        // Event listeners
+        document.getElementById('search').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('sort').addEventListener('change', applyFilters);
+        document.getElementById('load-more').addEventListener('click', loadMore);
+        document.getElementById('search-clear').addEventListener('click', () => {
+            document.getElementById('search').value = '';
+            applyFilters();
+        });
+        
+        loadData();
+    </script>
+</body>
+</html>
