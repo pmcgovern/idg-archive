@@ -2,300 +2,193 @@
 <html lang="en">
 <head>
 
-  <style id="shared-nav-style">
-    #archive-nav {
-      background: #0d1117;
-      border-bottom: 1px solid #21262d;
-      padding: 10px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      position: sticky;
-      top: 0;
-      z-index: 9999;
-    }
-    #archive-nav a.home-btn {
-      color: #7d8590;
-      text-decoration: none;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    #archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
-    #archive-nav .nav-divider { color: #21262d; font-size: 18px; }
-    #archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
-    #archive-nav .nav-accent { 
-      margin-left: auto;
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-  </style>
+  
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computerworld Archive Browser</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f0f5; 
-            color: #333;
-            min-height: 100vh;
-        }
-        header {
-            background: linear-gradient(135deg, #2d1b69 0%, #1a3a5c 50%, #1e4d6b 100%);
-            padding: 24px 28px;
-            border-bottom: 3px solid #7c4dff;
-            color: white;
-        }
-        h1 { font-size: 1.9em; margin-bottom: 4px; letter-spacing: -0.5px; }
-        h1 span { color: #b388ff; }
-        .subtitle { color: #b0bec5; font-size: 0.95em; }
-        .stats { 
-            display: flex; 
-            gap: 16px; 
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-        .stat { 
-            background: rgba(124,77,255,0.2); 
-            padding: 6px 14px; 
-            border-radius: 20px;
-            font-size: 0.85em;
-            color: #e8e0ff;
-        }
-        .stat strong { color: #b388ff; }
+    
+<style>
+:root { --accent: #58a6ff; }
+/* ═══════════════════════════════════════
+   IDG Archive — Shared Design System
+   ═══════════════════════════════════════ */
 
-        .wayback-badge {
-            display: inline-block;
-            background: #e3f2fd;
-            color: #1565c0;
-            font-size: 0.7em;
-            padding: 2px 7px;
-            border-radius: 10px;
-            font-weight: 600;
-            margin-left: 6px;
-            vertical-align: middle;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        
-        .controls {
-            background: #fff;
-            padding: 14px 24px;
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .filter-group { display: flex; align-items: center; gap: 8px; }
-        .filter-group label { color: #666; font-size: 0.88em; font-weight: 500; }
-        select, input[type="text"] {
-            background: #f5f5fa;
-            border: 1px solid #d0d0e0;
-            color: #333;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.9em;
-        }
-        select:focus, input:focus { outline: none; border-color: #7c4dff; box-shadow: 0 0 0 2px rgba(124,77,255,0.15); }
-        .search-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        .search-wrapper input { width: 260px; padding-right: 32px; }
-        .search-clear {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 1.2em;
-            cursor: pointer;
-            display: none;
-            padding: 2px 4px;
-            line-height: 1;
-        }
-        .search-clear:hover { color: #7c4dff; }
-        .search-clear.visible { display: block; }
-        
-        .decade-pills {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .decade-pill {
-            background: #eeeef5;
-            border: 1px solid #d8d8e8;
-            color: #555;
-            padding: 5px 13px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-size: 0.82em;
-            transition: all 0.2s;
-        }
-        .decade-pill:hover { background: #e0dff0; border-color: #7c4dff; }
-        .decade-pill.active { background: #7c4dff; color: white; border-color: #7c4dff; }
-        
-        main { padding: 20px 24px; max-width: 1600px; margin: 0 auto; }
-        
-        #results-info {
-            color: #888;
-            margin-bottom: 16px;
-            font-size: 0.88em;
-        }
-        
-        .issues-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 16px;
-        }
-        
-        .issue-card {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #e0e0ea;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .issue-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(45,27,105,0.12);
-            border-color: #7c4dff;
-        }
-        
-        .issue-header {
-            background: linear-gradient(90deg, #2d1b69, #1a3a5c);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .issue-date {
-            font-weight: 600;
-            color: #b388ff;
-            font-size: 1.05em;
-        }
-        .issue-vol {
-            color: #8899aa;
-            font-size: 0.82em;
-        }
-        
-        .issue-body { padding: 14px 16px; }
-        
-        .headlines {
-            list-style: none;
-            margin-bottom: 12px;
-        }
-        .headlines li {
-            padding: 5px 0;
-            border-bottom: 1px solid #f0f0f5;
-            font-size: 0.88em;
-            line-height: 1.45;
-            color: #444;
-        }
-        .headlines li:last-child { border-bottom: none; }
-        .no-headlines {
-            color: #aaa;
-            font-style: italic;
-            font-size: 0.85em;
-            margin-bottom: 12px;
-        }
-        mark {
-            background: #fff3b0;
-            color: #333;
-            padding: 1px 3px;
-            border-radius: 2px;
-        }
-        
-        .archive-link {
-            display: inline-block;
-            background: linear-gradient(135deg, #7c4dff, #536dfe);
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.84em;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .archive-link:hover { 
-            background: linear-gradient(135deg, #651fff, #304ffe);
-            box-shadow: 0 3px 10px rgba(124,77,255,0.3);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 60px;
-            color: #888;
-        }
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #7c4dff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .error { color: #e94560; padding: 40px; text-align: center; }
-        
-        #load-more {
-            display: block;
-            margin: 30px auto;
-            background: linear-gradient(135deg, #7c4dff, #536dfe);
-            border: none;
-            color: white;
-            padding: 12px 32px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        #load-more:hover { 
-            background: linear-gradient(135deg, #651fff, #304ffe);
-            box-shadow: 0 4px 15px rgba(124,77,255,0.3);
-        }
-        #load-more:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
-        
-        footer {
-            text-align: center;
-            padding: 24px;
-            color: #999;
-            font-size: 0.82em;
-            border-top: 1px solid #e0e0e8;
-            margin-top: 40px;
-        }
-        footer a { color: #7c4dff; }
-        
-        @media (max-width: 600px) {
-            header { padding: 16px; }
-            h1 { font-size: 1.4em; }
-            .controls { padding: 12px 16px; }
-            .search-wrapper input { width: 180px; }
-            .issues-grid { grid-template-columns: 1fr; }
-            main { padding: 16px; }
-        }
-    </style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+}
+
+/* ── Nav bar ── */
+#archive-nav {
+  background: #010409;
+  border-bottom: 1px solid #21262d;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#archive-nav a.home-btn {
+  color: #7d8590;
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  transition: color 0.15s, border-color 0.15s;
+}
+#archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
+#archive-nav .nav-divider { color: #30363d; font-size: 18px; }
+#archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
+#archive-nav .nav-accent {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ── Header ── */
+header {
+  padding: 36px 28px 32px;
+  border-bottom: 1px solid #21262d;
+  color: white;
+}
+header h1 { font-size: clamp(22px, 4vw, 36px); margin-bottom: 6px; letter-spacing: -0.5px; }
+header h1 span { opacity: 0.7; }
+.subtitle { color: #7d8590; font-size: 14px; margin-bottom: 20px; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.stat {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #c9d1d9;
+}
+.stat strong { color: white; }
+
+/* ── Controls bar ── */
+.controls {
+  background: #161b22;
+  padding: 12px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid #21262d;
+  position: sticky;
+  top: 45px;
+  z-index: 100;
+}
+.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group label { color: #7d8590; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+select, input[type="text"] {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+select:focus, input:focus { outline: none; border-color: #58a6ff; }
+
+/* ── Decade pills ── */
+.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 20px; background: #0d1117; border-bottom: 1px solid #21262d; }
+.decade-pill {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #7d8590;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.decade-pill:hover { color: #e6edf3; border-color: #7d8590; }
+.decade-pill.active { color: white; border-color: var(--accent, #58a6ff); background: rgba(88,166,255,0.1); }
+
+/* ── Issue grid ── */
+.issues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.issue-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.issue-card:hover {
+  border-color: var(--accent, #58a6ff);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.issue-date { font-size: 11px; color: var(--accent, #58a6ff); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
+.issue-meta { font-size: 12px; color: #7d8590; margin-bottom: 8px; }
+.issue-headlines { list-style: none; }
+.issue-headlines li { font-size: 13px; color: #c9d1d9; padding: 3px 0; border-bottom: 1px solid #21262d; line-height: 1.4; }
+.issue-headlines li:last-child { border-bottom: none; }
+.issue-headlines li::before { content: '›'; color: var(--accent, #58a6ff); margin-right: 6px; }
+.no-headlines { font-size: 12px; color: #484f58; font-style: italic; }
+
+/* ── Load more ── */
+.load-more-btn {
+  display: block;
+  margin: 24px auto;
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  padding: 10px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.load-more-btn:hover { background: #30363d; }
+
+/* ── Empty / error ── */
+.empty { text-align: center; padding: 60px 20px; color: #7d8590; font-size: 15px; }
+.error { text-align: center; padding: 40px; color: #f85149; }
+
+/* ── Wayback badge ── */
+.wayback-badge {
+  display: inline-block;
+  background: rgba(88,166,255,0.1);
+  color: #58a6ff;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+header { background: linear-gradient(135deg, #0d1117 0%, #1a73e822 100%); border-bottom: 2px solid #1a73e8; }
+.decade-pill.active { background: #1a73e822; border-color: #58a6ff; color: white; }
+</style>
 </head>
 <body>
     <header>

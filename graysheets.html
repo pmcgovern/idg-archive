@@ -5,59 +5,188 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>The Gray Sheet Archive (1964-1999)</title>
+
 <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f8f9fa; color: #333; }
-        h1 { color: #2c3e50; border-bottom: 3px solid #34495e; padding-bottom: 15px; margin-bottom: 10px; }
-        .subtitle { color: #7f8c8d; font-style: italic; margin-bottom: 25px; font-size: 1.1em; }
-        .intro { background: #fff; padding: 20px 25px; border-left: 5px solid #3498db; margin-bottom: 25px; line-height: 1.7; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 8px 8px 0; }
-        .search-row { margin-bottom: 20px; }
-        .search-box { width: 100%; padding: 14px 18px; font-size: 16px; border: 2px solid #bdc3c7; border-radius: 8px; transition: border-color 0.2s; }
-        .search-box:focus { outline: none; border-color: #3498db; }
-        .stats { display: flex; gap: 15px; flex-wrap: wrap; background: linear-gradient(135deg, #2c3e50, #34495e); padding: 20px; margin-bottom: 25px; border-radius: 10px; }
-        .stat { text-align: center; flex: 1; min-width: 100px; color: #fff; }
-        .stat-num { font-size: 2em; font-weight: bold; }
-        .stat-label { font-size: 0.85em; opacity: 0.85; margin-top: 5px; }
-        
-        /* Volume Cards */
-        .volume-section { background: #fff; margin: 12px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: box-shadow 0.2s; }
-        .volume-section:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
-        .volume-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #34495e, #2c3e50); color: #fff; cursor: pointer; transition: background 0.2s; }
-        .volume-header:hover { background: linear-gradient(135deg, #3d566e, #34495e); }
-        .volume-left { display: flex; align-items: center; gap: 15px; }
-        .expand-icon { font-size: 1.2em; transition: transform 0.3s; width: 20px; }
-        .volume-header.open .expand-icon { transform: rotate(90deg); }
-        .volume-title { font-size: 1.25em; font-weight: 600; }
-        .volume-dates { font-size: 0.9em; opacity: 0.85; }
-        .volume-right { display: flex; align-items: center; gap: 12px; }
-        .volume-count { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
-        .click-hint { background: #3498db; padding: 8px 16px; border-radius: 6px; font-size: 0.85em; font-weight: 600; letter-spacing: 0.3px; }
-        
-        /* Issues List */
-        .issues-container { display: none; padding: 0; background: #fafbfc; }
-        .issues-container.open { display: block; }
-        .issue-row { padding: 16px 25px; border-bottom: 1px solid #ecf0f1; display: flex; align-items: flex-start; gap: 20px; transition: background 0.15s; }
-        .issue-row:hover { background: #f1f3f4; }
-        .issue-row:last-child { border-bottom: none; }
-        .issue-meta { min-width: 130px; flex-shrink: 0; }
-        .issue-num { font-weight: 700; color: #2c3e50; font-size: 1em; }
-        .issue-date { color: #7f8c8d; font-size: 0.9em; margin-top: 3px; }
-        .issue-headline { flex: 1; line-height: 1.5; }
-        .headline-link { color: #2980b9; text-decoration: none; font-weight: 500; transition: color 0.15s; display: block; }
-        .headline-link:hover { color: #1a5276; text-decoration: underline; }
-        .issue-actions { flex-shrink: 0; }
-        .view-btn { background: #ecf0f1; color: #2c3e50; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; font-weight: 500; transition: background 0.15s, color 0.15s; white-space: nowrap; }
-        .view-btn:hover { background: #3498db; color: #fff; }
-        .no-results { padding: 40px; text-align: center; color: #7f8c8d; font-size: 1.1em; }
-        
-        @media (max-width: 700px) {
-            .issue-row { flex-direction: column; gap: 10px; padding: 14px 18px; }
-            .issue-meta { min-width: auto; display: flex; gap: 10px; align-items: baseline; }
-            .volume-header { flex-direction: column; gap: 12px; align-items: flex-start; }
-            .volume-right { width: 100%; justify-content: space-between; }
-            .click-hint { display: none; }
-        }
-    </style>
+:root { --accent: #d4a042; }
+/* ═══════════════════════════════════════
+   IDG Archive — Shared Design System
+   ═══════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+}
+
+/* ── Nav bar ── */
+#archive-nav {
+  background: #010409;
+  border-bottom: 1px solid #21262d;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#archive-nav a.home-btn {
+  color: #7d8590;
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  transition: color 0.15s, border-color 0.15s;
+}
+#archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
+#archive-nav .nav-divider { color: #30363d; font-size: 18px; }
+#archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
+#archive-nav .nav-accent {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ── Header ── */
+header {
+  padding: 36px 28px 32px;
+  border-bottom: 1px solid #21262d;
+  color: white;
+}
+header h1 { font-size: clamp(22px, 4vw, 36px); margin-bottom: 6px; letter-spacing: -0.5px; }
+header h1 span { opacity: 0.7; }
+.subtitle { color: #7d8590; font-size: 14px; margin-bottom: 20px; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.stat {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #c9d1d9;
+}
+.stat strong { color: white; }
+
+/* ── Controls bar ── */
+.controls {
+  background: #161b22;
+  padding: 12px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid #21262d;
+  position: sticky;
+  top: 45px;
+  z-index: 100;
+}
+.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group label { color: #7d8590; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+select, input[type="text"] {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+select:focus, input:focus { outline: none; border-color: #58a6ff; }
+
+/* ── Decade pills ── */
+.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 20px; background: #0d1117; border-bottom: 1px solid #21262d; }
+.decade-pill {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #7d8590;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.decade-pill:hover { color: #e6edf3; border-color: #7d8590; }
+.decade-pill.active { color: white; border-color: var(--accent, #58a6ff); background: rgba(88,166,255,0.1); }
+
+/* ── Issue grid ── */
+.issues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.issue-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.issue-card:hover {
+  border-color: var(--accent, #58a6ff);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.issue-date { font-size: 11px; color: var(--accent, #58a6ff); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
+.issue-meta { font-size: 12px; color: #7d8590; margin-bottom: 8px; }
+.issue-headlines { list-style: none; }
+.issue-headlines li { font-size: 13px; color: #c9d1d9; padding: 3px 0; border-bottom: 1px solid #21262d; line-height: 1.4; }
+.issue-headlines li:last-child { border-bottom: none; }
+.issue-headlines li::before { content: '›'; color: var(--accent, #58a6ff); margin-right: 6px; }
+.no-headlines { font-size: 12px; color: #484f58; font-style: italic; }
+
+/* ── Load more ── */
+.load-more-btn {
+  display: block;
+  margin: 24px auto;
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  padding: 10px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.load-more-btn:hover { background: #30363d; }
+
+/* ── Empty / error ── */
+.empty { text-align: center; padding: 60px 20px; color: #7d8590; font-size: 15px; }
+.error { text-align: center; padding: 40px; color: #f85149; }
+
+/* ── Wayback badge ── */
+.wayback-badge {
+  display: inline-block;
+  background: rgba(88,166,255,0.1);
+  color: #58a6ff;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+header { background: linear-gradient(135deg, #0d1117 0%, #b07d2a22 100%); border-bottom: 2px solid #b07d2a; }
+.decade-pill.active { background: #b07d2a22; border-color: #d4a042; color: white; }
+</style>
 </head>
 <body>
 <h1>📊 The Gray Sheet Archive</h1>

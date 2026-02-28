@@ -2,89 +2,193 @@
 <html lang="en">
 <head>
 
-  <style id="shared-nav-style">
-    #archive-nav {
-      background: #0d1117;
-      border-bottom: 1px solid #21262d;
-      padding: 10px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      position: sticky;
-      top: 0;
-      z-index: 9999;
-    }
-    #archive-nav a.home-btn {
-      color: #7d8590;
-      text-decoration: none;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    #archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
-    #archive-nav .nav-divider { color: #21262d; font-size: 18px; }
-    #archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
-    #archive-nav .nav-accent { 
-      margin-left: auto;
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-  </style>
+  
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IDG World Update Archive (1979-2018)</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: Georgia, serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f0; }
-        h1 { color: #1a3c6e; border-bottom: 3px solid #1a3c6e; padding-bottom: 15px; margin-bottom: 10px; }
-        .subtitle { color: #666; font-style: italic; margin-bottom: 20px; }
-        .intro { background: #fff; padding: 20px; border-left: 4px solid #1a3c6e; margin-bottom: 20px; line-height: 1.6; }
-        .search-row { margin-bottom: 15px; }
-        .search-box { width: 100%; padding: 12px 15px; font-size: 16px; border: 2px solid #1a3c6e; border-radius: 5px; }
-        .stats { display: flex; gap: 20px; flex-wrap: wrap; background: #1a3c6e; color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-        .stat { text-align: center; flex: 1; min-width: 80px; }
-        .stat-num { font-size: 1.5em; font-weight: bold; }
-        .stat-label { font-size: 0.8em; opacity: 0.9; }
-        
-        .year-section { background: #fff; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; }
-        .year-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
-            background: linear-gradient(to right, #1a3c6e, #2d5a9e); color: #fff; cursor: pointer; }
-        .year-header:hover { background: linear-gradient(to right, #2d5a9e, #3d6ab8); }
-        .year-title { font-size: 1.2em; font-weight: bold; }
-        .year-count { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 10px; font-size: 0.9em; }
-        
-        .issues-container { display: none; padding: 0; background: #fafafa; }
-        .issues-container.open { display: block; }
-        
-        .issue-row { padding: 12px 20px; border-bottom: 1px solid #eee; display: flex; align-items: flex-start; gap: 15px; }
-        .issue-row:hover { background: #f0f0f0; }
-        .issue-row:last-child { border-bottom: none; }
-        
-        .issue-meta { min-width: 130px; color: #666; font-size: 0.9em; }
-        .issue-num { font-weight: bold; color: #1a3c6e; }
-        .issue-headline { flex: 1; line-height: 1.4; }
-        .issue-link { color: #1a3c6e; text-decoration: none; font-size: 0.85em; white-space: nowrap; }
-        .issue-link:hover { text-decoration: underline; }
-        
-        .expand-icon { transition: transform 0.2s; }
-        .year-header.open .expand-icon { transform: rotate(90deg); }
-        
-        .credits { margin-top: 30px; padding: 15px; background: #e8e8e8; border-radius: 5px; font-size: 0.9em; color: #666; }
-        
-        @media (max-width: 600px) {
-            .issue-row { flex-direction: column; gap: 5px; }
-            .issue-meta { min-width: auto; }
-        }
-    </style>
+    
+<style>
+:root { --accent: #3fb950; }
+/* ═══════════════════════════════════════
+   IDG Archive — Shared Design System
+   ═══════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+}
+
+/* ── Nav bar ── */
+#archive-nav {
+  background: #010409;
+  border-bottom: 1px solid #21262d;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#archive-nav a.home-btn {
+  color: #7d8590;
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  transition: color 0.15s, border-color 0.15s;
+}
+#archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
+#archive-nav .nav-divider { color: #30363d; font-size: 18px; }
+#archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
+#archive-nav .nav-accent {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ── Header ── */
+header {
+  padding: 36px 28px 32px;
+  border-bottom: 1px solid #21262d;
+  color: white;
+}
+header h1 { font-size: clamp(22px, 4vw, 36px); margin-bottom: 6px; letter-spacing: -0.5px; }
+header h1 span { opacity: 0.7; }
+.subtitle { color: #7d8590; font-size: 14px; margin-bottom: 20px; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.stat {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #c9d1d9;
+}
+.stat strong { color: white; }
+
+/* ── Controls bar ── */
+.controls {
+  background: #161b22;
+  padding: 12px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid #21262d;
+  position: sticky;
+  top: 45px;
+  z-index: 100;
+}
+.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group label { color: #7d8590; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+select, input[type="text"] {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+select:focus, input:focus { outline: none; border-color: #58a6ff; }
+
+/* ── Decade pills ── */
+.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 20px; background: #0d1117; border-bottom: 1px solid #21262d; }
+.decade-pill {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #7d8590;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.decade-pill:hover { color: #e6edf3; border-color: #7d8590; }
+.decade-pill.active { color: white; border-color: var(--accent, #58a6ff); background: rgba(88,166,255,0.1); }
+
+/* ── Issue grid ── */
+.issues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.issue-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.issue-card:hover {
+  border-color: var(--accent, #58a6ff);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.issue-date { font-size: 11px; color: var(--accent, #58a6ff); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
+.issue-meta { font-size: 12px; color: #7d8590; margin-bottom: 8px; }
+.issue-headlines { list-style: none; }
+.issue-headlines li { font-size: 13px; color: #c9d1d9; padding: 3px 0; border-bottom: 1px solid #21262d; line-height: 1.4; }
+.issue-headlines li:last-child { border-bottom: none; }
+.issue-headlines li::before { content: '›'; color: var(--accent, #58a6ff); margin-right: 6px; }
+.no-headlines { font-size: 12px; color: #484f58; font-style: italic; }
+
+/* ── Load more ── */
+.load-more-btn {
+  display: block;
+  margin: 24px auto;
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  padding: 10px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.load-more-btn:hover { background: #30363d; }
+
+/* ── Empty / error ── */
+.empty { text-align: center; padding: 60px 20px; color: #7d8590; font-size: 15px; }
+.error { text-align: center; padding: 40px; color: #f85149; }
+
+/* ── Wayback badge ── */
+.wayback-badge {
+  display: inline-block;
+  background: rgba(88,166,255,0.1);
+  color: #58a6ff;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+header { background: linear-gradient(135deg, #0d1117 0%, #1a7a3a22 100%); border-bottom: 2px solid #1a7a3a; }
+.decade-pill.active { background: #1a7a3a22; border-color: #3fb950; color: white; }
+</style>
 </head>
 <body>
     <h1>📰 IDG World Update Archive</h1>
