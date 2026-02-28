@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gray Sheet — Link Comparison Tool</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; padding: 24px; }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .sub { color: #7d8590; font-size: 14px; margin-bottom: 24px; }
+  .progress { background: #21262d; border-radius: 8px; padding: 12px 18px; margin-bottom: 24px; font-size: 14px; }
+  .progress strong { color: #3fb950; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 10px 12px; background: #161b22; color: #7d8590; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid #30363d; }
+  td { padding: 10px 12px; border-bottom: 1px solid #21262d; vertical-align: middle; font-size: 14px; }
+  td.num { color: #7d8590; width: 30px; }
+  .year { color: #7d8590; font-size: 12px; }
+  .link-btn { display: inline-block; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; margin-right: 6px; }
+  .link-btn.gen { background: rgba(26,115,232,0.15); color: #58a6ff; border: 1px solid rgba(26,115,232,0.3); }
+  .link-btn.v3 { background: rgba(46,160,67,0.15); color: #3fb950; border: 1px solid rgba(46,160,67,0.3); }
+  .link-btn:hover { opacity: 0.8; }
+  .vote { background: #21262d; color: #7d8590; border: 1px solid #30363d; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-right: 4px; }
+  .vote:hover { background: #30363d; color: #e6edf3; }
+  .vote.selected-gen { background: rgba(26,115,232,0.3); color: #58a6ff; border-color: #58a6ff; }
+  .vote.selected-v3 { background: rgba(46,160,67,0.3); color: #3fb950; border-color: #3fb950; }
+  .vote.selected-both { background: rgba(248,81,73,0.2); color: #f85149; border-color: #f85149; }
+  .note { color: #7d8590; font-size: 12px; }
+  .export-btn { background: #238636; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 24px; }
+  .export-btn:hover { background: #2ea043; }
+  tr.done { opacity: 0.6; }
+</style>
+</head>
+<body>
+<h1>📋 Gray Sheet — Link Comparison Tool</h1>
+<p class="sub">31 issues where Gen/Jinny version and Jan 30 version have different page offsets.<br>
+Click each link to open in archive.org, then vote for which one lands on the correct first page of that issue.</p>
+
+<div class="progress" id="progress-bar">
+  Progress: <strong id="done-count">0</strong> / 31 verified
+</div>
+
+<table>
+<thead>
+  <tr>
+    <th>#</th>
+    <th>Issue</th>
+    <th>🔵 Gen/Jinny version</th>
+    <th>🟢 Jan 30 version</th>
+    <th>Which is correct?</th>
+    <th>Notes</th>
+  </tr>
+</thead>
+<tbody>
+
+    <tr>
+      <td class="num">1</td>
+      <td><strong>Vol 1</strong><br><span class="year">1966</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1966-1/page/n234/mode/1up" target="_blank" class="link-btn gen">
+          n234 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1966-1/page/n118/mode/1up" target="_blank" class="link-btn v3">
+          n118 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(0,'gen')" id="v0-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(0,'v3')" id="v0-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(0,'both')" id="v0-both">✗ Neither</button>
+      </td>
+      <td><span id="note0" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">2</td>
+      <td><strong>Vol 2</strong><br><span class="year">1966</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1966-2/page/n216/mode/1up" target="_blank" class="link-btn gen">
+          n216 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1966-2/page/n80/mode/1up" target="_blank" class="link-btn v3">
+          n80 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(1,'gen')" id="v1-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(1,'v3')" id="v1-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(1,'both')" id="v1-both">✗ Neither</button>
+      </td>
+      <td><span id="note1" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">3</td>
+      <td><strong>Vol 3</strong><br><span class="year">1967</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1967-3/page/n277/mode/1up" target="_blank" class="link-btn gen">
+          n277 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1967-3/page/n62/mode/1up" target="_blank" class="link-btn v3">
+          n62 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(2,'gen')" id="v2-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(2,'v3')" id="v2-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(2,'both')" id="v2-both">✗ Neither</button>
+      </td>
+      <td><span id="note2" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">4</td>
+      <td><strong>Vol 4</strong><br><span class="year">1968</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1968-4/page/n264/mode/1up" target="_blank" class="link-btn gen">
+          n264 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1968-4/page/n52/mode/1up" target="_blank" class="link-btn v3">
+          n52 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(3,'gen')" id="v3-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(3,'v3')" id="v3-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(3,'both')" id="v3-both">✗ Neither</button>
+      </td>
+      <td><span id="note3" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">5</td>
+      <td><strong>Vol 5</strong><br><span class="year">1969</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1969-5/page/n302/mode/1up" target="_blank" class="link-btn gen">
+          n302 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1969-5/page/n266/mode/1up" target="_blank" class="link-btn v3">
+          n266 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(4,'gen')" id="v4-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(4,'v3')" id="v4-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(4,'both')" id="v4-both">✗ Neither</button>
+      </td>
+      <td><span id="note4" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">6</td>
+      <td><strong>Vol 6</strong><br><span class="year">1970</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1970-6/page/n207/mode/1up" target="_blank" class="link-btn gen">
+          n207 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1970-6/page/n200/mode/1up" target="_blank" class="link-btn v3">
+          n200 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(5,'gen')" id="v5-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(5,'v3')" id="v5-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(5,'both')" id="v5-both">✗ Neither</button>
+      </td>
+      <td><span id="note5" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">7</td>
+      <td><strong>Vol 7</strong><br><span class="year">1971</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1971-7/page/n197/mode/1up" target="_blank" class="link-btn gen">
+          n197 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1971-7/page/n184/mode/1up" target="_blank" class="link-btn v3">
+          n184 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(6,'gen')" id="v6-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(6,'v3')" id="v6-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(6,'both')" id="v6-both">✗ Neither</button>
+      </td>
+      <td><span id="note6" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">8</td>
+      <td><strong>Vol 8</strong><br><span class="year">1972</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1972-8/page/n202/mode/1up" target="_blank" class="link-btn gen">
+          n202 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1972-8/page/n194/mode/1up" target="_blank" class="link-btn v3">
+          n194 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(7,'gen')" id="v7-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(7,'v3')" id="v7-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(7,'both')" id="v7-both">✗ Neither</button>
+      </td>
+      <td><span id="note7" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">9</td>
+      <td><strong>Vol 10</strong><br><span class="year">1974</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1974-10/page/n202/mode/1up" target="_blank" class="link-btn gen">
+          n202 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1974-10/page/n14/mode/1up" target="_blank" class="link-btn v3">
+          n14 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(8,'gen')" id="v8-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(8,'v3')" id="v8-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(8,'both')" id="v8-both">✗ Neither</button>
+      </td>
+      <td><span id="note8" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">10</td>
+      <td><strong>Vol 11</strong><br><span class="year">1975</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1975-11/page/n187/mode/1up" target="_blank" class="link-btn gen">
+          n187 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1975-11/page/n28/mode/1up" target="_blank" class="link-btn v3">
+          n28 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(9,'gen')" id="v9-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(9,'v3')" id="v9-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(9,'both')" id="v9-both">✗ Neither</button>
+      </td>
+      <td><span id="note9" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">11</td>
+      <td><strong>Vol 12</strong><br><span class="year">1976</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1976-12/page/n178/mode/1up" target="_blank" class="link-btn gen">
+          n178 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1976-12/page/n34/mode/1up" target="_blank" class="link-btn v3">
+          n34 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(10,'gen')" id="v10-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(10,'v3')" id="v10-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(10,'both')" id="v10-both">✗ Neither</button>
+      </td>
+      <td><span id="note10" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">12</td>
+      <td><strong>Vol 13</strong><br><span class="year">1977</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1977-13/page/n188/mode/1up" target="_blank" class="link-btn gen">
+          n188 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1977-13/page/n36/mode/1up" target="_blank" class="link-btn v3">
+          n36 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(11,'gen')" id="v11-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(11,'v3')" id="v11-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(11,'both')" id="v11-both">✗ Neither</button>
+      </td>
+      <td><span id="note11" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">13</td>
+      <td><strong>Vol 14</strong><br><span class="year">1978</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1978-14/page/n4/mode/1up" target="_blank" class="link-btn gen">
+          n4 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1978-14/page/n162/mode/1up" target="_blank" class="link-btn v3">
+          n162 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(12,'gen')" id="v12-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(12,'v3')" id="v12-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(12,'both')" id="v12-both">✗ Neither</button>
+      </td>
+      <td><span id="note12" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">14</td>
+      <td><strong>Vol 15</strong><br><span class="year">1979</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1979-15/page/n214/mode/1up" target="_blank" class="link-btn gen">
+          n214 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1979-15/page/n94/mode/1up" target="_blank" class="link-btn v3">
+          n94 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(13,'gen')" id="v13-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(13,'v3')" id="v13-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(13,'both')" id="v13-both">✗ Neither</button>
+      </td>
+      <td><span id="note13" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">15</td>
+      <td><strong>Vol 16</strong><br><span class="year">1980</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1980-16/page/n4/mode/1up" target="_blank" class="link-btn gen">
+          n4 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1980-16/page/n57/mode/1up" target="_blank" class="link-btn v3">
+          n57 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(14,'gen')" id="v14-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(14,'v3')" id="v14-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(14,'both')" id="v14-both">✗ Neither</button>
+      </td>
+      <td><span id="note14" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">16</td>
+      <td><strong>Vol 17</strong><br><span class="year">1981</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1981-17/page/n4/mode/1up" target="_blank" class="link-btn gen">
+          n4 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1981-17/page/n132/mode/1up" target="_blank" class="link-btn v3">
+          n132 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(15,'gen')" id="v15-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(15,'v3')" id="v15-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(15,'both')" id="v15-both">✗ Neither</button>
+      </td>
+      <td><span id="note15" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">17</td>
+      <td><strong>Vol 18</strong><br><span class="year">1982</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1982-18/page/n6/mode/1up" target="_blank" class="link-btn gen">
+          n6 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1982-18/page/n73/mode/1up" target="_blank" class="link-btn v3">
+          n73 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(16,'gen')" id="v16-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(16,'v3')" id="v16-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(16,'both')" id="v16-both">✗ Neither</button>
+      </td>
+      <td><span id="note16" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">18</td>
+      <td><strong>Vol 19</strong><br><span class="year">1983</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1983-19/page/n6/mode/1up" target="_blank" class="link-btn gen">
+          n6 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1983-19/page/n142/mode/1up" target="_blank" class="link-btn v3">
+          n142 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(17,'gen')" id="v17-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(17,'v3')" id="v17-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(17,'both')" id="v17-both">✗ Neither</button>
+      </td>
+      <td><span id="note17" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">19</td>
+      <td><strong>Vol 20</strong><br><span class="year">1984</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1984-20/page/n50/mode/1up" target="_blank" class="link-btn gen">
+          n50 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1984-20/page/n9/mode/1up" target="_blank" class="link-btn v3">
+          n9 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(18,'gen')" id="v18-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(18,'v3')" id="v18-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(18,'both')" id="v18-both">✗ Neither</button>
+      </td>
+      <td><span id="note18" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">20</td>
+      <td><strong>Vol 21</strong><br><span class="year">1985</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1985-21/page/n3/mode/1up" target="_blank" class="link-btn gen">
+          n3 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1985-21/page/n116/mode/1up" target="_blank" class="link-btn v3">
+          n116 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(19,'gen')" id="v19-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(19,'v3')" id="v19-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(19,'both')" id="v19-both">✗ Neither</button>
+      </td>
+      <td><span id="note19" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">21</td>
+      <td><strong>Vol 23</strong><br><span class="year">1987</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1987-23/page/n2/mode/1up" target="_blank" class="link-btn gen">
+          n2 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1987-23/page/n118/mode/1up" target="_blank" class="link-btn v3">
+          n118 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(20,'gen')" id="v20-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(20,'v3')" id="v20-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(20,'both')" id="v20-both">✗ Neither</button>
+      </td>
+      <td><span id="note20" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">22</td>
+      <td><strong>Vol 25</strong><br><span class="year">1989</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1989-25/page/n10/mode/1up" target="_blank" class="link-btn gen">
+          n10 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1989-25/page/n165/mode/1up" target="_blank" class="link-btn v3">
+          n165 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(21,'gen')" id="v21-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(21,'v3')" id="v21-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(21,'both')" id="v21-both">✗ Neither</button>
+      </td>
+      <td><span id="note21" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">23</td>
+      <td><strong>Vol 26</strong><br><span class="year">1990</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1990-26/page/n171/mode/1up" target="_blank" class="link-btn gen">
+          n171 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1990-26/page/n170/mode/1up" target="_blank" class="link-btn v3">
+          n170 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(22,'gen')" id="v22-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(22,'v3')" id="v22-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(22,'both')" id="v22-both">✗ Neither</button>
+      </td>
+      <td><span id="note22" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">24</td>
+      <td><strong>Vol 27</strong><br><span class="year">1991</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1991-27/page/n200/mode/1up" target="_blank" class="link-btn gen">
+          n200 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1991-27/page/n176/mode/1up" target="_blank" class="link-btn v3">
+          n176 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(23,'gen')" id="v23-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(23,'v3')" id="v23-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(23,'both')" id="v23-both">✗ Neither</button>
+      </td>
+      <td><span id="note23" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">25</td>
+      <td><strong>Vol 28</strong><br><span class="year">1992</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1992-28/page/n188/mode/1up" target="_blank" class="link-btn gen">
+          n188 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1992-28/page/n172/mode/1up" target="_blank" class="link-btn v3">
+          n172 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(24,'gen')" id="v24-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(24,'v3')" id="v24-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(24,'both')" id="v24-both">✗ Neither</button>
+      </td>
+      <td><span id="note24" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">26</td>
+      <td><strong>Vol 29</strong><br><span class="year">1993</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1993-29/page/n246/mode/1up" target="_blank" class="link-btn gen">
+          n246 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1993-29/page/n218/mode/1up" target="_blank" class="link-btn v3">
+          n218 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(25,'gen')" id="v25-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(25,'v3')" id="v25-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(25,'both')" id="v25-both">✗ Neither</button>
+      </td>
+      <td><span id="note25" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">27</td>
+      <td><strong>Vol 30</strong><br><span class="year">1994</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1994-30/page/n214/mode/1up" target="_blank" class="link-btn gen">
+          n214 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1994-30/page/n257/mode/1up" target="_blank" class="link-btn v3">
+          n257 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(26,'gen')" id="v26-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(26,'v3')" id="v26-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(26,'both')" id="v26-both">✗ Neither</button>
+      </td>
+      <td><span id="note26" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">28</td>
+      <td><strong>Vol 31</strong><br><span class="year">1995</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1995-31/page/nNone/mode/1up" target="_blank" class="link-btn gen">
+          n0 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1995-31/page/n104/mode/1up" target="_blank" class="link-btn v3">
+          n104 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(27,'gen')" id="v27-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(27,'v3')" id="v27-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(27,'both')" id="v27-both">✗ Neither</button>
+      </td>
+      <td><span id="note27" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">29</td>
+      <td><strong>Vol 32</strong><br><span class="year">1996</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1996-32/page/n2/mode/1up" target="_blank" class="link-btn gen">
+          n2 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1996-32/page/nNone/mode/1up" target="_blank" class="link-btn v3">
+          n0 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(28,'gen')" id="v28-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(28,'v3')" id="v28-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(28,'both')" id="v28-both">✗ Neither</button>
+      </td>
+      <td><span id="note28" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">30</td>
+      <td><strong>Vol 33</strong><br><span class="year">1998</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1998-33/page/n2/mode/1up" target="_blank" class="link-btn gen">
+          n2 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1998-33/page/nNone/mode/1up" target="_blank" class="link-btn v3">
+          n0 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(29,'gen')" id="v29-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(29,'v3')" id="v29-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(29,'both')" id="v29-both">✗ Neither</button>
+      </td>
+      <td><span id="note29" class="note"></span></td>
+    </tr>
+    <tr>
+      <td class="num">31</td>
+      <td><strong>Vol 34</strong><br><span class="year">1999</span></td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1999-34/page/n2/mode/1up" target="_blank" class="link-btn gen">
+          n2 ↗
+        </a>
+      </td>
+      <td>
+        <a href="https://archive.org/details/thegraysheet-1999-34/page/nNone/mode/1up" target="_blank" class="link-btn v3">
+          n0 ↗
+        </a>
+      </td>
+      <td>
+        <button class="vote" onclick="vote(30,'gen')" id="v30-gen">✓ Gen</button>
+        <button class="vote" onclick="vote(30,'v3')" id="v30-v3">✓ Jan30</button>
+        <button class="vote" onclick="vote(30,'both')" id="v30-both">✗ Neither</button>
+      </td>
+      <td><span id="note30" class="note"></span></td>
+    </tr>
+</tbody>
+</table>
+
+<button class="export-btn" onclick="exportResults()">📋 Export Results as JSON</button>
+
+<script>
+const results = {};
+function vote(i, winner) {
+  results[i] = winner;
+  ['gen','v3','both'].forEach(w => {
+    document.getElementById(`v${i}-${w}`).className = 'vote' + (winner===w ? ` selected-${winner==='both'?'both':w}` : '');
+  });
+  document.getElementById(`note${i}`).textContent = winner === 'gen' ? '✓ Gen wins' : winner === 'v3' ? '✓ Jan30 wins' : '✗ Needs fix';
+  const done = Object.keys(results).length;
+  document.getElementById('done-count').textContent = done;
+}
+function exportResults() {
+  const out = Object.entries(results).map(([i, w]) => ({i: parseInt(i), winner: w}));
+  const blob = new Blob([JSON.stringify(out, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'graysheet-comparison-results.json';
+  a.click();
+}
+</script>
+</body>
+</html>
