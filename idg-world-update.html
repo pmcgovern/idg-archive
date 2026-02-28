@@ -189,6 +189,62 @@ select:focus, input:focus { outline: none; border-color: #58a6ff; }
 header { background: linear-gradient(135deg, #0d1117 0%, #1a7a3a22 100%); border-bottom: 2px solid #1a7a3a; }
 .decade-pill.active { background: #1a7a3a22; border-color: #3fb950; color: white; }
 </style>
+<style id="wu-readability">
+/* Links */
+a { color: #c9d1d9 !important; text-decoration: none; }
+a:hover { color: #3fb950 !important; text-decoration: underline; }
+
+/* Year section headers */
+h2 { 
+  color: #3fb950 !important; 
+  font-size: 16px !important;
+  border-bottom: 1px solid #30363d;
+  padding: 12px 0 8px;
+  margin: 20px 0 8px;
+  cursor: pointer;
+}
+
+/* Issue entries - make them card-like */
+.issue, li, .entry {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 6px 0;
+  list-style: none;
+  transition: border-color 0.15s;
+}
+.issue:hover, li:hover, .entry:hover { border-color: #3fb950; }
+
+/* Dates */
+.date, .issue-date, b, strong { color: #3fb950 !important; font-size: 12px; }
+
+/* Headlines */
+.headline, h3, h4 { color: #e6edf3 !important; font-size: 14px; line-height: 1.5; margin: 4px 0; }
+
+/* Container */
+#content, .content, main, .container { 
+  max-width: 900px; 
+  margin: 0 auto; 
+  padding: 16px 20px; 
+}
+
+/* Search */
+input[type="text"] {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  color: #e6edf3 !important;
+  padding: 8px 14px !important;
+  border-radius: 6px !important;
+}
+
+/* Remove white backgrounds */
+body { background: #0d1117 !important; }
+* { background-color: inherit; }
+.issue, li, .entry { background-color: #161b22 !important; }
+
+p, div, td { color: #c9d1d9; }
+</style>
 </head>
 <body>
     <h1>📰 IDG World Update Archive</h1>

@@ -187,6 +187,61 @@ select:focus, input:focus { outline: none; border-color: #58a6ff; }
 header { background: linear-gradient(135deg, #0d1117 0%, #b07d2a22 100%); border-bottom: 2px solid #b07d2a; }
 .decade-pill.active { background: #b07d2a22; border-color: #d4a042; color: white; }
 </style>
+<style id="gs-readability">
+/* Fix link colors - the big issue */
+a { color: #c9d1d9 !important; text-decoration: none; }
+a:hover { color: #d4a042 !important; text-decoration: underline; }
+
+/* Volume headers */
+.volume-header, h2, h3 { color: #e6edf3 !important; border-bottom: 1px solid #30363d; padding-bottom: 8px; margin: 24px 0 12px; }
+
+/* Issue rows */
+.issue-row, li { 
+  padding: 6px 0; 
+  border-bottom: 1px solid #161b22;
+  list-style: none;
+}
+
+/* Issue dates */
+.issue-date, b, strong { color: #d4a042 !important; }
+
+/* Container */
+.container, main, #content, .content { 
+  max-width: 1000px; 
+  margin: 0 auto; 
+  padding: 20px 24px; 
+}
+
+/* Search box */
+input[type="text"] {
+  background: #161b22 !important;
+  border: 1px solid #30363d !important;
+  color: #e6edf3 !important;
+  padding: 8px 14px !important;
+  border-radius: 6px !important;
+  width: 280px;
+}
+
+/* Stats pills */
+.stat-pill, .stats span {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 13px;
+  margin: 3px;
+}
+
+/* Body text */
+p, td, th, div { color: #c9d1d9; }
+th { color: #7d8590 !important; }
+
+/* Remove any white backgrounds */
+* { background-color: transparent; }
+body { background: #0d1117 !important; }
+</style>
 </head>
 <body>
 <h1>📊 The Gray Sheet Archive</h1>
