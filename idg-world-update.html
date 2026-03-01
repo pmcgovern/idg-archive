@@ -155,7 +155,10 @@
 <div style="background:#f8f9fa;border-bottom:1px solid #dee2e6;padding:14px 24px">
   <div id="era-pills-wu" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-    <input id="search" oninput="filterAll()" placeholder="🔍 Search headlines, countries, topics..." type="text" style="flex:1;min-width:200px;padding:10px 16px;font-size:15px;border:2px solid #bdc3c7;border-radius:8px"/>
+    <div style="position:relative;display:flex;align-items:center;flex:1;min-width:200px">
+      <input id="search" oninput="filterAll(); document.getElementById('search-clear-wu').style.display=this.value?'block':'none';" placeholder="🔍 Search headlines, countries, topics..." type="text" style="flex:1;min-width:200px;padding:10px 16px;font-size:15px;border:2px solid #bdc3c7;border-radius:8px"/>
+      <button id="search-clear-wu" onclick="document.getElementById('search').value=''; this.style.display='none'; filterAll();" style="display:none;position:absolute;right:10px;background:none;border:none;font-size:16px;cursor:pointer;color:#999;padding:0;line-height:1">×</button>
+    </div>
     <label style="font-size:15px;font-weight:600;color:#1a4d2e;white-space:nowrap">Sort:</label>
     <select id="sort-wu" onchange="sortAndRender()" style="font-size:15px;padding:9px 14px;border-radius:8px;border:2px solid #bdc3c7;background:white">
       <option value="asc">Year (oldest first)</option>
