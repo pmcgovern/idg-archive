@@ -8184,33 +8184,58 @@ Results from IDC's 1993 Global IT Survey</a>
         
         function filterAll() {
             const query = document.getElementById('search').value.toLowerCase().trim();
-            
+            let totalShown = 0, totalAll = 0;
+
             document.querySelectorAll('.volume-section').forEach(section => {
+                const allRows = section.querySelectorAll('.issue-row');
+                totalAll += allRows.length;
+
                 if (!query) {
                     section.style.display = 'block';
-                    section.querySelectorAll('.issue-row').forEach(row => row.style.display = 'flex');
+                    allRows.forEach(row => row.style.display = 'flex');
+                    totalShown += allRows.length;
+                    // Close volumes when clearing search
+                    const content = section.querySelector('.issues-container');
+                    const icon = section.querySelector('.expand-icon');
+                    if (content) content.style.display = 'none';
+                    if (icon) icon.textContent = '▶';
                     return;
                 }
-                
-                let hasMatch = false;
-                
-                section.querySelectorAll('.issue-row').forEach(row => {
-                    const rowData = row.dataset.search;
+
+                let matchCount = 0;
+                allRows.forEach(row => {
+                    const rowData = (row.dataset.search || row.textContent).toLowerCase();
                     if (rowData.includes(query)) {
                         row.style.display = 'flex';
-                        hasMatch = true;
+                        matchCount++;
                     } else {
                         row.style.display = 'none';
                     }
                 });
-                
-                section.style.display = hasMatch ? 'block' : 'none';
-                
-                if (hasMatch && query.length > 2) {
-                    section.querySelector('.volume-header').classList.add('open');
-                    section.querySelector('.issues-container').classList.add('open');
+
+                section.style.display = matchCount > 0 ? 'block' : 'none';
+                totalShown += matchCount;
+
+                // Auto-open matching volumes
+                const content = section.querySelector('.issues-container');
+                const icon = section.querySelector('.expand-icon');
+                if (matchCount > 0 && content) {
+                    content.style.display = 'block';
+                    if (icon) icon.textContent = '▼';
+                } else if (content) {
+                    content.style.display = 'none';
+                    if (icon) icon.textContent = '▶';
                 }
             });
+
+            // Update "Showing" bar
+            const info = document.getElementById('results-info');
+            if (info) {
+                const issueWord = totalShown === 1 ? 'issue' : 'issues';
+                info.textContent = query 
+                    ? 'Showing ' + totalShown.toLocaleString() + ' of ' + totalAll.toLocaleString() + ' ' + issueWord + ' matching "' + query + '"'
+                    : 'Showing ' + totalAll.toLocaleString() + ' ' + issueWord;
+            }
         }
     </script>
 </body>
