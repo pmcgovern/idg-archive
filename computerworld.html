@@ -29,7 +29,7 @@
         /* Volume Cards */
         .volume-section { margin-bottom: 8px; width: 100%; }
         .volume-section:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
-        .volume-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); color: #fff; cursor: pointer; transition: background 0.2s; }
+        .volume-header { padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); color: #fff; cursor: pointer; transition: background 0.2s; }
         .volume-header:hover { background: linear-gradient(135deg, #3d566e, #1a2d5a); }
         .volume-left { display: flex; align-items: center; gap: 15px; }
 
@@ -45,7 +45,7 @@
 
         .expand-icon { font-size: 1.2em; transition: transform 0.3s; width: 20px; }
         .volume-header.open .expand-icon { transform: rotate(90deg); }
-        .volume-title { font-size: 1.25em; font-weight: 600; }
+        .volume-title { font-size: 1.5em; font-weight: 600; }
         .volume-dates { font-size: 0.9em; opacity: 0.85; }
         .volume-right { display: flex; align-items: center; gap: 12px; }
         .volume-count { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
@@ -152,12 +152,12 @@
         <div class="filter-group">
             <label for="search">Search:</label>
             <div class="search-wrapper">
-                <input type="text" id="search" placeholder="Search headlines...">
+                <input type="text" id="search" placeholder="Search headlines..." oninput="debounce(applyFilters, 300)()" style="width:340px;padding:10px 16px;font-size:15px;border:2px solid #bdc3c7;border-radius:8px;outline:none">
                 <button class="search-clear" id="search-clear" title="Clear search">×</button>
             </div>
         </div>
         <div class="filter-group">
-            <label for="sort" style="font-size:15px;font-weight:600;color:#333">Sort: </label><select id="sort" style="font-size:15px;padding:8px 12px;border-radius:6px;border:2px solid #bdc3c7">
+            <label for="sort" style="font-size:15px;font-weight:600;color:#2c3e50;margin-right:6px">Sort:</label><select id="sort" onchange="applyFilters()" style="font-size:15px;padding:9px 14px;border-radius:8px;border:2px solid #bdc3c7;background:white">
                 <option value="date-asc">Date (oldest first)</option>
                 <option value="date-desc">Date (newest first)</option>
                 <option value="headlines">Most headlines</option>
@@ -167,7 +167,7 @@
     
     <main>
         <div id="results-info"></div>
-        <div id="issues-grid" style="max-width:900px;margin:0 auto;padding:16px">
+        <div id="issues-grid" style="width:100%;padding:0">
             <div class="loading">Loading archive data...</div>
         </div>
         <button id="load-more" style="display:none;">Load More</button>
