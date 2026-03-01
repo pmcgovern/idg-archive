@@ -225,31 +225,34 @@
                 const decade = i.date.substring(0, 3) + '0s';
                 decades[decade] = (decades[decade] || 0) + 1;
             });
-            
             const sorted = Object.entries(decades)
                 .filter(([d]) => d.match(/^(19|20)/))
                 .sort((a, b) => a[0].localeCompare(b[0]));
-            
             const container = document.getElementById('decade-pills');
-            container.innerHTML = `<button class="decade-pill active" data-decade="all">All</button>`;
             
+            function activatePill(btn) {
+                document.querySelectorAll('.decade-pill').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                applyFilters();
+            }
+
+            const allBtn = document.createElement('button');
+            allBtn.className = 'decade-pill active';
+            allBtn.dataset.decade = 'all';
+            allBtn.textContent = 'All';
+            allBtn.onclick = () => activatePill(allBtn);
+            container.appendChild(allBtn);
+
             sorted.forEach(([decade, count]) => {
                 const btn = document.createElement('button');
                 btn.className = 'decade-pill';
                 btn.dataset.decade = decade;
-                btn.textContent = `${decade} (${count})`;
+                btn.textContent = decade + ' (' + count + ')';
+                btn.onclick = () => activatePill(btn);
                 container.appendChild(btn);
             });
-            
-            container.addEventListener('click', e => {
-                if (e.target.classList.contains('decade-pill')) {
-                    container.querySelectorAll('.decade-pill').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    applyFilters();
-                }
-            });
         }
-        
+
         function applyFilters() {
             const activeDecade = document.querySelector('.decade-pill.active')?.dataset.decade || 'all';
             currentSearch = document.getElementById('search').value.toLowerCase().trim();
