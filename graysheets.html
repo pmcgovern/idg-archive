@@ -8174,9 +8174,12 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <script>
         function toggleVolume(header) {
-            header.classList.toggle('open');
-            const container = header.nextElementSibling;
-            container.classList.toggle('open');
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.expand-icon');
+            const isOpen = content.style.display !== 'none';
+            content.style.display = isOpen ? 'none' : 'block';
+            icon.textContent = isOpen ? '▶' : '▼';
+            header.parentElement.classList.toggle('open', !isOpen);
         }
         
         function filterAll() {

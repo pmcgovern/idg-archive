@@ -117,6 +117,13 @@
         .issues-container { display: none; }
         .year-section.open .issues-container { display: block; }
         .year-section.open .year-header { border-radius: 8px 8px 0 0; }
+        .issue-title-link { 
+            color: #1a3a6e; 
+            text-decoration: none; 
+            flex: 1;
+            font-weight: 500;
+        }
+        .issue-title-link:hover { color: #1a73e8; text-decoration: underline; }
 </style>
 
 
@@ -142,7 +149,13 @@
         <div class="stat"><div class="stat-num">1979</div><div class="stat-label">First Issue</div></div>
         <div class="stat"><div class="stat-num">2018</div><div class="stat-label">Last Issue</div></div>
     </div>
-    
+<div style="margin-top:10px;display:flex;align-items:center;gap:12px">
+        <label style="font-size:15px;font-weight:600;color:#333">Sort: </label>
+        <select id="sort-wu" onchange="sortAndRender()" style="font-size:14px;padding:7px 12px;border-radius:6px;border:2px solid #bdc3c7">
+            <option value="asc">Date (oldest first)</option>
+            <option value="desc">Date (newest first)</option>
+        </select>
+    </div>
     <div id="years-container">
 
         <div class="year-section" data-search="2018 sales executive board thrives on collaboration; guides oneidg sales sales executive board thrives on collaboration; guides oneidg sales sales executive board thrives on collaboration; guides oneidg sales idg connect sales, delivery reflect local market needs idg communications&#x27; &quot;build, partner, buy&quot; initiative takes shape idg communications leaders set priorities, create global boards idg tech(talk) has new logo, brand strategy and visual language clients find tech industry insight at idc&#x27;s u.s. directions conferences idc emea&#x27;s winning bid for eu contract moves to services phase town halls focus on idgc&#x27;s strong foundation, roadmap for growth video specialists team up to share workload, insights, best practices sales operations center plays key role in assisting global sales team idg u.k. uses proven strategies for new french, spanish b2c sites cmo marks five years focused on australian tech marketers idg connect nordics, idg sweden educate clients about demand gen new product helps customers succeed at digital transformation idc a/p study with microsoft examines dx&#x27;s economic impact idc new zealand hosts 12th annual cio summit and awards idg india&#x27;s dell emc custom event expands target markets new translation tool helps editors save time, produce local content new twists on cio 100 sessions deepen audience engagement full nerd video series expands to become a product and community recruitment via youtube videos works for idg germany, clients idc china&#x27;s expanded dx summit features first gala awards dinner idgc hosts security breakfasts idgc&#x27;s holiday affiliate revenue gains show year-on-year growth">
@@ -14679,9 +14692,13 @@
     
     <script>
         function toggleYear(header) {
-            header.classList.toggle('open');
-            const container = header.nextElementSibling;
-            container.classList.toggle('open');
+            const section = header.parentElement;
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.expand-icon');
+            const isOpen = content && content.style.display !== 'none';
+            if (content) content.style.display = isOpen ? 'none' : 'block';
+            if (icon) icon.textContent = isOpen ? '▶' : '▼';
+            section.classList.toggle('open', !isOpen);
         }
         
         function filterAll() {
