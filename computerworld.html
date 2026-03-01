@@ -22,7 +22,9 @@
     }
         .search-box:focus { outline: none; border-color: #1a73e8; }
         .stats { display: flex; gap: 15px; flex-wrap: wrap; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); padding: 20px; margin-bottom: 0; border-radius: 10px; }
-        .stat { text-align: center; flex: 1; min-width: 100px; color: #fff; }
+        .stat { text-align: center; color: #fff; }
+        .stat-num { font-size: 2em; font-weight: 700; line-height: 1.1; }
+        .stat-label { font-size: 0.8em; opacity: 0.8; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-num { font-size: 2em; font-weight: bold; }
         .stat-label { font-size: 0.85em; opacity: 0.85; margin-top: 5px; }
         
@@ -131,6 +133,8 @@
             transition: border-color 0.15s, box-shadow 0.15s;
         }
         .issue-card:hover { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.15); }
+
+        .intro { background: #fff; padding: 20px 25px; border-left: 5px solid #1a73e8; margin-bottom: 0; line-height: 1.7; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 8px 8px 0; font-size: 15px; color: #444; }
 </style>
 
 </head>
@@ -144,7 +148,7 @@
     <header>
         <h1>📰 Computerworld <span>Archive Browser</span></h1>
         <p class="subtitle">IDG's flagship publication • 1967–2026 • Internet Archive + Wayback Machine</p>
-        <div class="stats" id="stats">Loading stats...</div>
+        <div class="stats" id="stats" class="stats">Loading stats...</div>
     </header>
     
     <div class="controls">
@@ -156,7 +160,11 @@
                 <button class="search-clear" id="search-clear" title="Clear search">×</button>
             </div>
             <label for="sort" style="font-size:15px;font-weight:600;color:#2c3e50;white-space:nowrap;margin-left:8px">Sort:</label>
-            <select id="sort" onchange="applyFilters()" style="font-size:15px;padding:9px 14px;border-radius:8px;border:2px solid #bdc3c7;background:white">
+            <select id="sort" onchange="applyFilters()" style="font-size:15px;padding:9px 14px;border-radius:8px;border:2px solid #bdc3c7;
+<div class="intro" style="margin:16px 24px 0 24px">
+  <strong>Computerworld</strong> was IDG's flagship weekly technology newspaper, covering the computer industry from the mainframe and minicomputer era through the rise of the internet and mobile computing. Founded and published by Patrick J. McGovern and International Data Group (IDG), it became the most widely read technology publication in the world.
+</div>
+background:white">
                 <option value="date-asc">Date (oldest first)</option>
                 <option value="date-desc">Date (newest first)</option>
             </select>
@@ -201,24 +209,16 @@
         }
         
         function updateStats() {
-            const totalHeadlines = allIssues.reduce((sum, i) => sum + i.headlines.length, 0);
-            const decades = {};
-            allIssues.forEach(i => {
-                const decade = i.date.substring(0, 3) + '0s';
-                decades[decade] = (decades[decade] || 0) + 1;
-            });
-            const yearRange = allIssues.length > 0 
-                ? `${allIssues[0].date.substring(0,4)}–${allIssues[allIssues.length-1].date.substring(0,4)}`
-                : '';
-            
+            const firstYear = allIssues.length > 0 ? allIssues[0].date.substring(0,4) : '1967';
+            const lastYear = allIssues.length > 0 ? allIssues[allIssues.length-1].date.substring(0,4) : '2026';
+            const decades = new Set(allIssues.map(i => i.date.substring(0,3)+'0s')).size;
             document.getElementById('stats').innerHTML = `
-                <span class="stat"><strong>${allIssues.length.toLocaleString()}</strong> issues</span>
-                <span class="stat"><strong>${totalHeadlines.toLocaleString()}</strong> headlines extracted</span>
-                <span class="stat"><strong>${Object.keys(decades).length}</strong> decades covered</span>
-                <span class="stat"><strong>${yearRange}</strong> date range</span>
+                <div class="stat"><div class="stat-num">${allIssues.length.toLocaleString()}</div><div class="stat-label">Issues Indexed</div></div>
+                <div class="stat"><div class="stat-num">${decades}</div><div class="stat-label">Decades Covered</div></div>
+                <div class="stat"><div class="stat-num">${firstYear}</div><div class="stat-label">First Issue</div></div>
+                <div class="stat"><div class="stat-num">${lastYear}</div><div class="stat-label">Last Issue</div></div>
             `;
         }
-        
         function buildDecadePills() {
             const decades = {};
             allIssues.forEach(i => {
