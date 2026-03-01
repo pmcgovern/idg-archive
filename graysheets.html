@@ -86,17 +86,26 @@
         and the team at International Data Corporation (IDC).<br/><br/>
 <strong>📂 Click any volume below to browse individual issues. Headlines are linked directly to the archived pages.</strong>
 </div>
-<div style="padding:12px 0 8px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-  <div id="era-pills" style="display:flex;gap:8px;flex-wrap:wrap;flex:1"></div>
   <label style="font-size:15px;font-weight:600;color:#2c3e50;white-space:nowrap">Sort:</label>
   <select id="sort-gs" onchange="sortVolumes()" style="font-size:14px;padding:8px 12px;border-radius:8px;border:2px solid #bdc3c7;background:white">
     <option value="asc">Volume (oldest first)</option>
     <option value="desc">Volume (newest first)</option>
   </select>
 </div>
-<div class="search-row">
-<input class="search-box" id="search" oninput="filterAll()" placeholder="🔍 Search headlines, dates, companies (e.g., IBM, 1975, antitrust)..." type="text"/>
+<div style="background:white;border-bottom:1px solid #dee2e6;padding:16px 24px">
+  <!-- Era pills row -->
+  <div id="era-pills" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+  <!-- Search + Sort row -->
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <input class="search-box" id="search" oninput="filterAll()" placeholder="🔍 Search headlines, dates, companies (e.g., IBM, 1975, antitrust)..." type="text" style="flex:1;min-width:200px;padding:10px 16px;font-size:15px;border:2px solid #bdc3c7;border-radius:8px"/>
+    <label style="font-size:15px;font-weight:600;color:#2c3e50;white-space:nowrap">Sort:</label>
+    <select id="sort-gs" onchange="sortVolumes()" style="font-size:15px;padding:9px 14px;border-radius:8px;border:2px solid #bdc3c7;background:white">
+      <option value="asc">Volume (oldest first)</option>
+      <option value="desc">Volume (newest first)</option>
+    </select>
+  </div>
 </div>
+
 <div class="stats">
 <div class="stat"><div class="stat-num">668</div><div class="stat-label">Issues Indexed</div></div>
 <div class="stat"><div class="stat-num">32</div><div class="stat-label">Volumes</div></div>
