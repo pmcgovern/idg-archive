@@ -86,11 +86,6 @@
         and the team at International Data Corporation (IDC).<br/><br/>
 <strong>📂 Click any volume below to browse individual issues. Headlines are linked directly to the archived pages.</strong>
 </div>
-  <label style="font-size:15px;font-weight:600;color:#2c3e50;white-space:nowrap">Sort:</label>
-  <select id="sort-gs" onchange="sortVolumes()" style="font-size:14px;padding:8px 12px;border-radius:8px;border:2px solid #bdc3c7;background:white">
-    <option value="asc">Volume (oldest first)</option>
-    <option value="desc">Volume (newest first)</option>
-  </select>
 </div>
 <div style="background:white;border-bottom:1px solid #dee2e6;padding:16px 24px">
   <!-- Era pills row -->
@@ -8299,5 +8294,12 @@ Results from IDC's 1993 Global IT Survey</a>
             }
         }
     </script>
+<script>
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ buildEraPills(); filterAll(); });
+  } else {
+    buildEraPills(); filterAll();
+  }
+</script>
 </body>
 </html>
