@@ -231,21 +231,25 @@
             const container = document.getElementById('decade-pills');
             container.innerHTML = '';
 
-            const ACTIVE_STYLE = 'background:#1a2d5a;color:#fff;border-color:#1a2d5a;font-weight:700;';
-            const IDLE_STYLE   = 'background:#fff;color:#333;border-color:#bdc3c7;font-weight:600;';
+            const ACTIVE = 'padding:8px 18px;border-radius:20px;border:2px solid #1a2d5a;background:#1a2d5a;color:#fff;font-size:14px;font-weight:700;cursor:pointer;';
+            const IDLE   = 'padding:8px 18px;border-radius:20px;border:1.5px solid #bdc3c7;background:#fff;color:#333;font-size:14px;font-weight:600;cursor:pointer;';
 
             function activatePill(clicked) {
-                container.querySelectorAll('button').forEach(b => b.setAttribute('style', IDLE_STYLE));
-                clicked.setAttribute('style', ACTIVE_STYLE);
+                container.querySelectorAll('button').forEach(b => {
+                    b.setAttribute('style', IDLE);
+                    b.classList.remove('active');
+                });
+                clicked.setAttribute('style', ACTIVE);
+                clicked.classList.add('active');
                 applyFilters();
             }
 
             function makePill(label, decade, isActive) {
                 const btn = document.createElement('button');
-                btn.className = 'decade-pill';
                 btn.dataset.decade = decade;
                 btn.textContent = label;
-                btn.setAttribute('style', isActive ? ACTIVE_STYLE : IDLE_STYLE);
+                btn.setAttribute('style', isActive ? ACTIVE : IDLE);
+                if (isActive) btn.classList.add('active');
                 btn.onclick = () => activatePill(btn);
                 return btn;
             }
