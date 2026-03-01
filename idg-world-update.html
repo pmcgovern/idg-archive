@@ -45,7 +45,7 @@
         .volume-dates { font-size: 0.9em; opacity: 0.85; }
         .volume-right { display: flex; align-items: center; gap: 12px; }
         .volume-count { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
-        .click-hint { background: #1a7a3a; padding: 8px 16px; border-radius: 6px; font-size: 0.85em; font-weight: 600; letter-spacing: 0.3px; }
+        
         
         /* Issues List */
         .issues-container { display: none; padding: 0; background: #fafbfc; }
@@ -69,7 +69,7 @@
             .issue-meta { min-width: auto; display: flex; gap: 10px; align-items: baseline; }
             .volume-header { flex-direction: column; gap: 12px; align-items: flex-start; }
             .volume-right { width: 100%; justify-content: space-between; }
-            .click-hint { display: none; }
+            
         }
     
         .pub-label {
@@ -145,7 +145,15 @@
         IDG's global growth and achievements.
     </div>
     
-    <div class="search-row">
+    <div style="padding:12px 0 8px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+  <div id="era-pills-wu" style="display:flex;gap:8px;flex-wrap:wrap;flex:1"></div>
+  <label style="font-size:15px;font-weight:600;color:#1a4d2e;white-space:nowrap">Sort:</label>
+  <select id="sort-wu" onchange="sortAndRender()" style="font-size:14px;padding:8px 12px;border-radius:8px;border:2px solid #bdc3c7;background:white">
+    <option value="asc">Year (oldest first)</option>
+    <option value="desc">Year (newest first)</option>
+  </select>
+</div>
+<div class="search-row">
         <input type="text" class="search-box" id="search" placeholder="🔍 Search headlines..." oninput="filterAll()">
     </div>
     
@@ -14718,13 +14726,41 @@
             });
             sections.forEach(s => container.appendChild(s));
         }
+
+        function buildEraPillsWU() {
+            const ACTIVE = 'padding:7px 16px;border-radius:20px;border:2px solid #1a4d2e;background:#1a4d2e;color:#fff;font-size:14px;font-weight:700;cursor:pointer;';
+            const IDLE   = 'padding:7px 16px;border-radius:20px;border:1.5px solid #bdc3c7;background:#fff;color:#333;font-size:14px;font-weight:600;cursor:pointer;';
+            const eras = [{label:'All',val:'all'},{label:'1970s',val:'197'},{label:'1980s',val:'198'},{label:'1990s',val:'199'},{label:'2000s',val:'200'},{label:'2010s',val:'201'}];
+            const container = document.getElementById('era-pills-wu');
+            function activatePill(clicked) {
+                container.querySelectorAll('button').forEach(b => { b.setAttribute('style', IDLE); b.classList.remove('active'); });
+                clicked.setAttribute('style', ACTIVE); clicked.classList.add('active');
+                filterAll();
+            }
+            eras.forEach((era, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'era-pill-wu' + (i === 0 ? ' active' : '');
+                btn.dataset.era = era.val;
+                btn.textContent = era.label;
+                btn.setAttribute('style', i === 0 ? ACTIVE : IDLE);
+                btn.onclick = () => activatePill(btn);
+                container.appendChild(btn);
+            });
+        }
+
         function filterAll() {
             const query = document.getElementById('search').value.toLowerCase().trim();
+            const activeEra = document.querySelector('.era-pill-wu.active')?.dataset?.era || 'all';
             let totalShown = 0, totalAll = 0;
 
             document.querySelectorAll('.year-section').forEach(section => {
+                const yearEl = section.querySelector('.year-title');
+                const year = yearEl ? yearEl.textContent.trim().substring(0,3) : '';
+                const eraMatch = activeEra === 'all' || year === activeEra;
                 const allRows = section.querySelectorAll('.issue-row');
                 totalAll += allRows.length;
+
+                if (!eraMatch) { section.style.display = 'none'; return; }
 
                 if (!query) {
                     section.style.display = 'block';
@@ -14740,34 +14776,23 @@
                 let matchCount = 0;
                 allRows.forEach(row => {
                     const rowData = (row.dataset.search || row.textContent).toLowerCase();
-                    if (rowData.includes(query)) {
-                        row.style.display = 'flex';
-                        matchCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    if (rowData.includes(query)) { row.style.display = 'flex'; matchCount++; }
+                    else row.style.display = 'none';
                 });
-
                 section.style.display = matchCount > 0 ? 'block' : 'none';
                 totalShown += matchCount;
-
                 const content = section.querySelector('.issues-container');
                 const icon = section.querySelector('.expand-icon');
-                if (matchCount > 0 && content) {
-                    content.style.display = 'block';
-                    if (icon) icon.textContent = '▼';
-                } else if (content) {
-                    content.style.display = 'none';
-                    if (icon) icon.textContent = '▶';
-                }
+                if (matchCount > 0 && content) { content.style.display = 'block'; if (icon) icon.textContent = '▼'; }
+                else if (content) { content.style.display = 'none'; if (icon) icon.textContent = '▶'; }
             });
 
             const info = document.getElementById('results-info-wu');
             if (info) {
-                const issueWord = totalShown === 1 ? 'issue' : 'issues';
+                const w = totalShown === 1 ? 'issue' : 'issues';
                 info.textContent = query
-                    ? 'Showing ' + totalShown.toLocaleString() + ' of ' + totalAll.toLocaleString() + ' ' + issueWord + ' matching "' + query + '"'
-                    : 'Showing ' + totalAll.toLocaleString() + ' ' + issueWord;
+                    ? 'Showing ' + totalShown.toLocaleString() + ' of ' + totalAll.toLocaleString() + ' ' + w + ' matching "' + query + '"'
+                    : 'Showing ' + totalShown.toLocaleString() + ' ' + w;
             }
         }
     </script>

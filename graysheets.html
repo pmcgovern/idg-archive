@@ -42,7 +42,7 @@
         .volume-dates { font-size: 0.9em; opacity: 0.85; }
         .volume-right { display: flex; align-items: center; gap: 12px; }
         .volume-count { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
-        .click-hint { background: #3498db; padding: 8px 16px; border-radius: 6px; font-size: 0.85em; font-weight: 600; letter-spacing: 0.3px; }
+        
         
         /* Issues List */
         .issues-container { display: none; padding: 0; background: #fafbfc; }
@@ -66,7 +66,7 @@
             .issue-meta { min-width: auto; display: flex; gap: 10px; align-items: baseline; }
             .volume-header { flex-direction: column; gap: 12px; align-items: flex-start; }
             .volume-right { width: 100%; justify-content: space-between; }
-            .click-hint { display: none; }
+            
         }
     </style>
 </head>
@@ -85,6 +85,14 @@
         the mainframe era through the dot-com boom. Founded and published by <strong>Patrick J. McGovern</strong> 
         and the team at International Data Corporation (IDC).<br/><br/>
 <strong>📂 Click any volume below to browse individual issues. Headlines are linked directly to the archived pages.</strong>
+</div>
+<div style="padding:12px 0 8px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+  <div id="era-pills" style="display:flex;gap:8px;flex-wrap:wrap;flex:1"></div>
+  <label style="font-size:15px;font-weight:600;color:#2c3e50;white-space:nowrap">Sort:</label>
+  <select id="sort-gs" onchange="sortVolumes()" style="font-size:14px;padding:8px 12px;border-radius:8px;border:2px solid #bdc3c7;background:white">
+    <option value="asc">Volume (oldest first)</option>
+    <option value="desc">Volume (newest first)</option>
+  </select>
 </div>
 <div class="search-row">
 <input class="search-box" id="search" oninput="filterAll()" placeholder="🔍 Search headlines, dates, companies (e.g., IBM, 1975, antitrust)..." type="text"/>
@@ -105,7 +113,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -408,7 +416,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -711,7 +719,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -1014,7 +1022,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -1317,7 +1325,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -1620,7 +1628,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -1923,7 +1931,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -2226,7 +2234,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -2529,7 +2537,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">24 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -2832,7 +2840,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -3100,7 +3108,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -3390,7 +3398,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -3681,7 +3689,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -3949,7 +3957,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">22 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -4206,7 +4214,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">20 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -4441,7 +4449,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">22 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -4698,7 +4706,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -4966,7 +4974,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -5234,7 +5242,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -5502,7 +5510,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">3 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -5550,7 +5558,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">22 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -5807,7 +5815,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">19 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -6031,7 +6039,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">21 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -6277,7 +6285,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">19 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -6501,7 +6509,7 @@
 </div>
 <div class="volume-right">
 <span class="volume-count">23 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -6770,7 +6778,7 @@ results from idc's 1993 global it survey">
 </div>
 <div class="volume-right">
 <span class="volume-count">21 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -7018,7 +7026,7 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <div class="volume-right">
 <span class="volume-count">20 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -7253,7 +7261,7 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <div class="volume-right">
 <span class="volume-count">15 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -7433,7 +7441,7 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <div class="volume-right">
 <span class="volume-count">18 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -7646,7 +7654,7 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <div class="volume-right">
 <span class="volume-count">19 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -7870,7 +7878,7 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <div class="volume-right">
 <span class="volume-count">20 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -8105,7 +8113,7 @@ Results from IDC's 1993 Global IT Survey</a>
 </div>
 <div class="volume-right">
 <span class="volume-count">5 issues</span>
-<span class="click-hint">▼ Click to Browse</span>
+
 </div>
 </div>
 <div class="issues-container">
@@ -8182,19 +8190,74 @@ Results from IDC's 1993 Global IT Survey</a>
             header.parentElement.classList.toggle('open', !isOpen);
         }
         
+
+        function buildEraPills() {
+            const ACTIVE = 'padding:7px 16px;border-radius:20px;border:2px solid #2c3e50;background:#2c3e50;color:#fff;font-size:14px;font-weight:700;cursor:pointer;';
+            const IDLE   = 'padding:7px 16px;border-radius:20px;border:1.5px solid #bdc3c7;background:#fff;color:#333;font-size:14px;font-weight:600;cursor:pointer;';
+
+            const eras = ['All','1960s','1970s','1980s','1990s','2000s'];
+            const container = document.getElementById('era-pills');
+
+            function activatePill(clicked, era) {
+                container.querySelectorAll('button').forEach(b => { b.setAttribute('style', IDLE); b.classList.remove('active'); });
+                clicked.setAttribute('style', ACTIVE);
+                clicked.classList.add('active');
+                clicked.dataset.era = era;
+                filterAll();
+            }
+
+            eras.forEach((era, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'era-pill' + (i === 0 ? ' active' : '');
+                btn.dataset.era = era === 'All' ? 'all' : era.substring(0,3) + '0';
+                btn.textContent = era;
+                btn.setAttribute('style', i === 0 ? ACTIVE : IDLE);
+                btn.onclick = () => activatePill(btn, btn.dataset.era);
+                container.appendChild(btn);
+            });
+        }
+
+        function sortVolumes() {
+            const val = document.getElementById('sort-gs').value;
+            const container = document.querySelector('.volumes-container') || document.getElementById('archive-content') || document.querySelector('main') || document.body;
+            const sections = Array.from(document.querySelectorAll('.volume-section'));
+            if (sections.length === 0) return;
+            const parent = sections[0].parentNode;
+            sections.sort((a, b) => {
+                const va = parseInt(a.querySelector('.volume-title')?.textContent?.match(/\d+/) || [0]);
+                const vb = parseInt(b.querySelector('.volume-title')?.textContent?.match(/\d+/) || [0]);
+                return val === 'desc' ? vb - va : va - vb;
+            });
+            // Re-insert before results-info
+            const info = document.getElementById('results-info');
+            sections.forEach(s => parent.appendChild(s));
+        }
+
         function filterAll() {
             const query = document.getElementById('search').value.toLowerCase().trim();
+            const activeEra = document.querySelector('.era-pill.active')?.dataset?.era || 'all';
             let totalShown = 0, totalAll = 0;
 
             document.querySelectorAll('.volume-section').forEach(section => {
+                // Era filter based on volume dates
+                const dateSpan = section.querySelector('.volume-dates')?.textContent || '';
+                const yearMatch = dateSpan.match(/\d{4}/);
+                const year = yearMatch ? parseInt(yearMatch[0]) : 0;
+                const decade = Math.floor(year / 10) * 10;
+                const eraMatch = activeEra === 'all' || String(decade) === activeEra;
+
                 const allRows = section.querySelectorAll('.issue-row');
                 totalAll += allRows.length;
+
+                if (!eraMatch) {
+                    section.style.display = 'none';
+                    return;
+                }
 
                 if (!query) {
                     section.style.display = 'block';
                     allRows.forEach(row => row.style.display = 'flex');
                     totalShown += allRows.length;
-                    // Close volumes when clearing search
                     const content = section.querySelector('.issues-container');
                     const icon = section.querySelector('.expand-icon');
                     if (content) content.style.display = 'none';
@@ -8205,36 +8268,25 @@ Results from IDC's 1993 Global IT Survey</a>
                 let matchCount = 0;
                 allRows.forEach(row => {
                     const rowData = (row.dataset.search || row.textContent).toLowerCase();
-                    if (rowData.includes(query)) {
-                        row.style.display = 'flex';
-                        matchCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    if (rowData.includes(query)) { row.style.display = 'flex'; matchCount++; }
+                    else row.style.display = 'none';
                 });
 
                 section.style.display = matchCount > 0 ? 'block' : 'none';
                 totalShown += matchCount;
 
-                // Auto-open matching volumes
                 const content = section.querySelector('.issues-container');
                 const icon = section.querySelector('.expand-icon');
-                if (matchCount > 0 && content) {
-                    content.style.display = 'block';
-                    if (icon) icon.textContent = '▼';
-                } else if (content) {
-                    content.style.display = 'none';
-                    if (icon) icon.textContent = '▶';
-                }
+                if (matchCount > 0 && content) { content.style.display = 'block'; if (icon) icon.textContent = '▼'; }
+                else if (content) { content.style.display = 'none'; if (icon) icon.textContent = '▶'; }
             });
 
-            // Update "Showing" bar
             const info = document.getElementById('results-info');
             if (info) {
                 const issueWord = totalShown === 1 ? 'issue' : 'issues';
-                info.textContent = query 
+                info.textContent = query
                     ? 'Showing ' + totalShown.toLocaleString() + ' of ' + totalAll.toLocaleString() + ' ' + issueWord + ' matching "' + query + '"'
-                    : 'Showing ' + totalAll.toLocaleString() + ' ' + issueWord;
+                    : 'Showing ' + totalShown.toLocaleString() + ' ' + issueWord;
             }
         }
     </script>
