@@ -21,7 +21,7 @@
         transition: border-color 0.2s; 
     }
         .search-box:focus { outline: none; border-color: #1a73e8; }
-        .stats { display: flex; gap: 15px; flex-wrap: wrap; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); padding: 20px; margin-bottom: 25px; border-radius: 10px; }
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); padding: 20px; margin-bottom: 0; border-radius: 10px; }
         .stat { text-align: center; flex: 1; min-width: 100px; color: #fff; }
         .stat-num { font-size: 2em; font-weight: bold; }
         .stat-label { font-size: 0.85em; opacity: 0.85; margin-top: 5px; }
@@ -164,8 +164,9 @@
     </div>
     
     <main>
-        <div id="results-info"></div>
-        <div id="issues-grid" style="width:100%;padding:0">
+        
+        <div id="results-info" style="padding:10px 28px 0 28px;font-size:13px;font-weight:700;color:#fff;background:#1a2d5a;letter-spacing:0.3px;text-transform:uppercase;"></div>
+    <div id="issues-grid" style="width:100%;padding:0">
             <div class="loading">Loading archive data...</div>
         </div>
         <button id="load-more" style="display:none;">Load More</button>
