@@ -9,185 +9,124 @@
     <title>Computerworld Archive Browser</title>
     
 <style>
-:root { --accent: #58a6ff; }
-/* ═══════════════════════════════════════
-   IDG Archive — Shared Design System
-   ═══════════════════════════════════════ */
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f8f9fa; color: #333; }
+        h1 { color: #1a2d5a; border-bottom: 3px solid #1a2d5a; padding-bottom: 15px; margin-bottom: 10px; }
+        .subtitle { color: #7f8c8d; font-style: italic; margin-bottom: 25px; font-size: 1.1em; }
+        .intro { background: #fff; padding: 20px 25px; border-left: 5px solid #1a73e8; margin-bottom: 25px; line-height: 1.7; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 8px 8px 0; }
+        .search-row { margin-bottom: 20px; }
+        .search-box { width: 100%; padding: 14px 18px; font-size: 16px; border: 2px solid #bdc3c7; border-radius: 8px; transition: border-color 0.2s; }
+        .search-box:focus { outline: none; border-color: #1a73e8; }
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); padding: 20px; margin-bottom: 25px; border-radius: 10px; }
+        .stat { text-align: center; flex: 1; min-width: 100px; color: #fff; }
+        .stat-num { font-size: 2em; font-weight: bold; }
+        .stat-label { font-size: 0.85em; opacity: 0.85; margin-top: 5px; }
+        
+        /* Volume Cards */
+        .volume-section { background: #fff; margin: 12px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: box-shadow 0.2s; }
+        .volume-section:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .volume-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #1a2d5a, #1a2d5a); color: #fff; cursor: pointer; transition: background 0.2s; }
+        .volume-header:hover { background: linear-gradient(135deg, #3d566e, #1a2d5a); }
+        .volume-left { display: flex; align-items: center; gap: 15px; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        .pub-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0 8px;
+            align-self: center;
+        }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0d1117;
-  color: #e6edf3;
-  min-height: 100vh;
-}
+        .expand-icon { font-size: 1.2em; transition: transform 0.3s; width: 20px; }
+        .volume-header.open .expand-icon { transform: rotate(90deg); }
+        .volume-title { font-size: 1.25em; font-weight: 600; }
+        .volume-dates { font-size: 0.9em; opacity: 0.85; }
+        .volume-right { display: flex; align-items: center; gap: 12px; }
+        .volume-count { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
+        .click-hint { background: #1a73e8; padding: 8px 16px; border-radius: 6px; font-size: 0.85em; font-weight: 600; letter-spacing: 0.3px; }
+        
+        /* Issues List */
+        .issues-container { display: none; padding: 0; background: #fafbfc; }
+        .issues-container.open { display: block; }
+        .issue-row { padding: 16px 25px; border-bottom: 1px solid #ecf0f1; display: flex; align-items: flex-start; gap: 20px; transition: background 0.15s; }
+        .issue-row:hover { background: #f1f3f4; }
+        .issue-row:last-child { border-bottom: none; }
+        .issue-meta { min-width: 130px; flex-shrink: 0; }
+        .issue-num { font-weight: 700; color: #1a2d5a; font-size: 1em; }
+        .issue-date { color: #7f8c8d; font-size: 0.9em; margin-top: 3px; }
+        .issue-headline { flex: 1; line-height: 1.5; }
+        .headline-link { color: #1557b0; text-decoration: none; font-weight: 500; transition: color 0.15s; display: block; }
+        .headline-link:hover { color: #1a5276; text-decoration: underline; }
+        .issue-actions { flex-shrink: 0; }
+        .view-btn { background: #ecf0f1; color: #1a2d5a; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; font-weight: 500; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+        .view-btn:hover { background: #1a73e8; color: #fff; }
+        .no-results { padding: 40px; text-align: center; color: #7f8c8d; font-size: 1.1em; }
+        
+        @media (max-width: 700px) {
+            .issue-row { flex-direction: column; gap: 10px; padding: 14px 18px; }
+            .issue-meta { min-width: auto; display: flex; gap: 10px; align-items: baseline; }
+            .volume-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .volume-right { width: 100%; justify-content: space-between; }
+            .click-hint { display: none; }
+        }
+    
+        .pub-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0 8px;
+            align-self: center;
+        }
+        /* Card grid within accordion */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+        }
+        .issue-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px 14px;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .issue-card:hover { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.15); }
+        .issue-date { font-size: 11px; color: #1a73e8; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; }
+        .issue-meta { font-size: 11px; color: #999; margin-bottom: 6px; }
+        .issue-headlines li { font-size: 13px; color: #333; border-bottom: 1px solid #f0f0f0; padding: 3px 0; line-height: 1.4; list-style: none; }
+        .issue-headlines li::before { content: '›'; color: #1a73e8; margin-right: 6px; }
+        .issue-headlines li:last-child { border-bottom: none; }
+        .no-headlines { font-size: 12px; color: #aaa; font-style: italic; }
+        .wayback-badge { font-size: 10px; color: #1a73e8; background: rgba(26,115,232,0.1); padding: 1px 5px; border-radius: 6px; margin-left: 4px; }
+        .load-more-wrap { text-align: center; padding: 12px; background: #f8f9fa; }
 
-/* ── Nav bar ── */
-#archive-nav {
-  background: #010409;
-  border-bottom: 1px solid #21262d;
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-#archive-nav a.home-btn {
-  color: #7d8590;
-  text-decoration: none;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  transition: color 0.15s, border-color 0.15s;
-}
-#archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
-#archive-nav .nav-divider { color: #30363d; font-size: 18px; }
-#archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
-#archive-nav .nav-accent {
-  margin-left: auto;
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-/* ── Header ── */
-header {
-  padding: 36px 28px 32px;
-  border-bottom: 1px solid #21262d;
-  color: white;
-}
-header h1 { font-size: clamp(22px, 4vw, 36px); margin-bottom: 6px; letter-spacing: -0.5px; }
-header h1 span { opacity: 0.7; }
-.subtitle { color: #7d8590; font-size: 14px; margin-bottom: 20px; }
-.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
-.stat {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  color: #c9d1d9;
-}
-.stat strong { color: white; }
-
-/* ── Controls bar ── */
-.controls {
-  background: #161b22;
-  padding: 12px 20px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid #21262d;
-  position: sticky;
-  top: 45px;
-  z-index: 100;
-}
-.filter-group { display: flex; align-items: center; gap: 8px; }
-.filter-group label { color: #7d8590; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-select, input[type="text"] {
-  background: #0d1117;
-  border: 1px solid #30363d;
-  color: #e6edf3;
-  padding: 7px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-family: inherit;
-}
-select:focus, input:focus { outline: none; border-color: #58a6ff; }
-
-/* ── Decade pills ── */
-.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 20px; background: #0d1117; border-bottom: 1px solid #21262d; }
-.decade-pill {
-  background: #161b22;
-  border: 1px solid #30363d;
-  color: #7d8590;
-  padding: 4px 12px;
-  border-radius: 14px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-.decade-pill:hover { color: #e6edf3; border-color: #7d8590; }
-.decade-pill.active { color: white; border-color: var(--accent, #58a6ff); background: rgba(88,166,255,0.1); }
-
-/* ── Issue grid ── */
-.issues-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-.issue-card {
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 10px;
-  padding: 16px 18px;
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-}
-.issue-card:hover {
-  border-color: var(--accent, #58a6ff);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-.issue-date { font-size: 11px; color: var(--accent, #58a6ff); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
-.issue-meta { font-size: 12px; color: #7d8590; margin-bottom: 8px; }
-.issue-headlines { list-style: none; }
-.issue-headlines li { font-size: 13px; color: #c9d1d9; padding: 3px 0; border-bottom: 1px solid #21262d; line-height: 1.4; }
-.issue-headlines li:last-child { border-bottom: none; }
-.issue-headlines li::before { content: '›'; color: var(--accent, #58a6ff); margin-right: 6px; }
-.no-headlines { font-size: 12px; color: #484f58; font-style: italic; }
-
-/* ── Load more ── */
-.load-more-btn {
-  display: block;
-  margin: 24px auto;
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #e6edf3;
-  padding: 10px 28px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-.load-more-btn:hover { background: #30363d; }
-
-/* ── Empty / error ── */
-.empty { text-align: center; padding: 60px 20px; color: #7d8590; font-size: 15px; }
-.error { text-align: center; padding: 40px; color: #f85149; }
-
-/* ── Wayback badge ── */
-.wayback-badge {
-  display: inline-block;
-  background: rgba(88,166,255,0.1);
-  color: #58a6ff;
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 8px;
-  font-weight: 600;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-header { background: linear-gradient(135deg, #0d1117 0%, #1a73e822 100%); border-bottom: 2px solid #1a73e8; }
-.decade-pill.active { background: #1a73e822; border-color: #58a6ff; color: white; }
+        .volume-section { margin-bottom: 8px; }
+        .volume-content { background: #f8f9fa; }
+        .issues-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 10px; 
+            padding: 14px; 
+        }
+        .issue-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .issue-card:hover { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.15); }
 </style>
 
 </head>
@@ -219,7 +158,7 @@ header { background: linear-gradient(135deg, #0d1117 0%, #1a73e822 100%); border
     
     <main>
         <div id="results-info"></div>
-        <div class="issues-grid" id="issues-grid">
+        <div class="issues-grid" id="issues-grid" style="max-width:1400px;margin:0 auto;padding:16px">
             <div class="loading">Loading archive data...</div>
         </div>
         <button id="load-more" style="display:none;">Load More</button>
@@ -351,24 +290,59 @@ header { background: linear-gradient(135deg, #0d1117 0%, #1a73e822 100%); border
         
         function loadMore() {
             const grid = document.getElementById('issues-grid');
-            const endIndex = Math.min(displayedCount + PAGE_SIZE, filteredIssues.length);
-            
-            for (let i = displayedCount; i < endIndex; i++) {
-                grid.appendChild(createIssueCard(filteredIssues[i]));
+            grid.innerHTML = '';
+            if (filteredIssues.length === 0) {
+                grid.innerHTML = '<div class="empty">No issues found. Try a different search.</div>';
+                updateResultsInfo();
+                return;
             }
-            
-            displayedCount = endIndex;
+            // Group by year for accordion
+            const byYear = {};
+            filteredIssues.forEach(i => {
+                const y = i.date ? i.date.substring(0,4) : '?';
+                if (!byYear[y]) byYear[y] = [];
+                byYear[y].push(i);
+            });
+            const years = Object.keys(byYear).sort();
+            years.forEach(year => {
+                const issues = byYear[year];
+                const section = document.createElement('div');
+                section.className = 'volume-section';
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'volume-header';
+                header.onclick = function() { toggleVolume(this); };
+                header.innerHTML = `
+                  <div class="volume-left">
+                    <span class="expand-icon">▶</span>
+                    <span class="volume-title">${year}</span>
+                    <span class="pub-label">Computerworld</span>
+                  </div>
+                  <div class="volume-right">
+                    <span class="volume-count">${issues.length} issues</span>
+                    <span class="browse-btn">▼ Click to Browse</span>
+                  </div>`;
+
+                // Content grid
+                const content = document.createElement('div');
+                content.className = 'volume-content';
+                content.style.display = 'none';
+                const innerGrid = document.createElement('div');
+                innerGrid.className = 'issues-grid';
+                issues.forEach(i => {
+                    const card = createIssueCard(i);
+                    innerGrid.appendChild(card);
+                });
+                content.appendChild(innerGrid);
+                section.appendChild(header);
+                section.appendChild(content);
+                grid.appendChild(section);
+            });
+            displayedCount = filteredIssues.length;
             updateResultsInfo();
-            
-            const loadMoreBtn = document.getElementById('load-more');
-            if (displayedCount < filteredIssues.length) {
-                loadMoreBtn.style.display = 'block';
-                loadMoreBtn.textContent = `Load More (${(filteredIssues.length - displayedCount).toLocaleString()} remaining)`;
-            } else {
-                loadMoreBtn.style.display = 'none';
-            }
+            document.getElementById('load-more').style.display = 'none';
         }
-        
         function highlightText(text, search) {
             if (!search) return escapeHtml(text);
             const escaped = escapeHtml(text);
@@ -449,6 +423,15 @@ header { background: linear-gradient(135deg, #0d1117 0%, #1a73e822 100%); border
         });
         
         loadData();
-    </script>
+    
+        function toggleVolume(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.expand-icon');
+            const isOpen = content.style.display !== 'none';
+            content.style.display = isOpen ? 'none' : 'block';
+            icon.textContent = isOpen ? '▶' : '▼';
+            header.parentElement.classList.toggle('open', !isOpen);
+        }
+        </script>
 </body>
 </html>

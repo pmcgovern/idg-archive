@@ -9,244 +9,117 @@
     <title>IDG World Update Archive (1979-2018)</title>
     
 <style>
-:root { --accent: #3fb950; }
-/* ═══════════════════════════════════════
-   IDG Archive — Shared Design System
-   ═══════════════════════════════════════ */
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f8f9fa; color: #333; }
+        h1 { color: #1a4d2e; border-bottom: 3px solid #1a4d2e; padding-bottom: 15px; margin-bottom: 10px; }
+        .subtitle { color: #7f8c8d; font-style: italic; margin-bottom: 25px; font-size: 1.1em; }
+        .intro { background: #fff; padding: 20px 25px; border-left: 5px solid #1a7a3a; margin-bottom: 25px; line-height: 1.7; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0 8px 8px 0; }
+        .search-row { margin-bottom: 20px; }
+        .search-box { width: 100%; padding: 14px 18px; font-size: 16px; border: 2px solid #bdc3c7; border-radius: 8px; transition: border-color 0.2s; }
+        .search-box:focus { outline: none; border-color: #1a7a3a; }
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; background: linear-gradient(135deg, #1a4d2e, #1a4d2e); padding: 20px; margin-bottom: 25px; border-radius: 10px; }
+        .stat { text-align: center; flex: 1; min-width: 100px; color: #fff; }
+        .stat-num { font-size: 2em; font-weight: bold; }
+        .stat-label { font-size: 0.85em; opacity: 0.85; margin-top: 5px; }
+        
+        /* Volume Cards */
+        .volume-section { background: #fff; margin: 12px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: box-shadow 0.2s; }
+        .volume-section:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .volume-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #1a4d2e, #1a4d2e); color: #fff; cursor: pointer; transition: background 0.2s; }
+        .volume-header:hover { background: linear-gradient(135deg, #3d566e, #1a4d2e); }
+        .volume-left { display: flex; align-items: center; gap: 15px; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        .pub-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0 8px;
+            align-self: center;
+        }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0d1117;
-  color: #e6edf3;
-  min-height: 100vh;
-}
+        .expand-icon { font-size: 1.2em; transition: transform 0.3s; width: 20px; }
+        .volume-header.open .expand-icon { transform: rotate(90deg); }
+        .volume-title { font-size: 1.25em; font-weight: 600; }
+        .volume-dates { font-size: 0.9em; opacity: 0.85; }
+        .volume-right { display: flex; align-items: center; gap: 12px; }
+        .volume-count { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
+        .click-hint { background: #1a7a3a; padding: 8px 16px; border-radius: 6px; font-size: 0.85em; font-weight: 600; letter-spacing: 0.3px; }
+        
+        /* Issues List */
+        .issues-container { display: none; padding: 0; background: #fafbfc; }
+        .issues-container.open { display: block; }
+        .issue-row { padding: 16px 25px; border-bottom: 1px solid #ecf0f1; display: flex; align-items: flex-start; gap: 20px; transition: background 0.15s; }
+        .issue-row:hover { background: #f1f3f4; }
+        .issue-row:last-child { border-bottom: none; }
+        .issue-meta { min-width: 130px; flex-shrink: 0; }
+        .issue-num { font-weight: 700; color: #1a4d2e; font-size: 1em; }
+        .issue-date { color: #7f8c8d; font-size: 0.9em; margin-top: 3px; }
+        .issue-headline { flex: 1; line-height: 1.5; }
+        .headline-link { color: #155d2e; text-decoration: none; font-weight: 500; transition: color 0.15s; display: block; }
+        .headline-link:hover { color: #1a5276; text-decoration: underline; }
+        .issue-actions { flex-shrink: 0; }
+        .view-btn { background: #ecf0f1; color: #1a4d2e; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; font-weight: 500; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+        .view-btn:hover { background: #1a7a3a; color: #fff; }
+        .no-results { padding: 40px; text-align: center; color: #7f8c8d; font-size: 1.1em; }
+        
+        @media (max-width: 700px) {
+            .issue-row { flex-direction: column; gap: 10px; padding: 14px 18px; }
+            .issue-meta { min-width: auto; display: flex; gap: 10px; align-items: baseline; }
+            .volume-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .volume-right { width: 100%; justify-content: space-between; }
+            .click-hint { display: none; }
+        }
+    
+        .pub-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0 8px;
+            align-self: center;
+        }
+        /* World Update year sections map to volume sections */
+        .year-section { margin-bottom: 8px; }
+        .year-header { background: linear-gradient(135deg, #1a4d2e, #1a7a3a); }
+        .year-header:hover { background: linear-gradient(135deg, #155d2e, #1a6a32); }
 
-/* ── Nav bar ── */
-#archive-nav {
-  background: #010409;
-  border-bottom: 1px solid #21262d;
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-#archive-nav a.home-btn {
-  color: #7d8590;
-  text-decoration: none;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  transition: color 0.15s, border-color 0.15s;
-}
-#archive-nav a.home-btn:hover { color: #e6edf3; border-color: #7d8590; }
-#archive-nav .nav-divider { color: #30363d; font-size: 18px; }
-#archive-nav .nav-title { color: #e6edf3; font-size: 13px; font-weight: 600; }
-#archive-nav .nav-accent {
-  margin-left: auto;
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-/* ── Header ── */
-header {
-  padding: 36px 28px 32px;
-  border-bottom: 1px solid #21262d;
-  color: white;
-}
-header h1 { font-size: clamp(22px, 4vw, 36px); margin-bottom: 6px; letter-spacing: -0.5px; }
-header h1 span { opacity: 0.7; }
-.subtitle { color: #7d8590; font-size: 14px; margin-bottom: 20px; }
-.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
-.stat {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  color: #c9d1d9;
-}
-.stat strong { color: white; }
-
-/* ── Controls bar ── */
-.controls {
-  background: #161b22;
-  padding: 12px 20px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid #21262d;
-  position: sticky;
-  top: 45px;
-  z-index: 100;
-}
-.filter-group { display: flex; align-items: center; gap: 8px; }
-.filter-group label { color: #7d8590; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-select, input[type="text"] {
-  background: #0d1117;
-  border: 1px solid #30363d;
-  color: #e6edf3;
-  padding: 7px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-family: inherit;
-}
-select:focus, input:focus { outline: none; border-color: #58a6ff; }
-
-/* ── Decade pills ── */
-.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 20px; background: #0d1117; border-bottom: 1px solid #21262d; }
-.decade-pill {
-  background: #161b22;
-  border: 1px solid #30363d;
-  color: #7d8590;
-  padding: 4px 12px;
-  border-radius: 14px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-.decade-pill:hover { color: #e6edf3; border-color: #7d8590; }
-.decade-pill.active { color: white; border-color: var(--accent, #58a6ff); background: rgba(88,166,255,0.1); }
-
-/* ── Issue grid ── */
-.issues-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-.issue-card {
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 10px;
-  padding: 16px 18px;
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-}
-.issue-card:hover {
-  border-color: var(--accent, #58a6ff);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-.issue-date { font-size: 11px; color: var(--accent, #58a6ff); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
-.issue-meta { font-size: 12px; color: #7d8590; margin-bottom: 8px; }
-.issue-headlines { list-style: none; }
-.issue-headlines li { font-size: 13px; color: #c9d1d9; padding: 3px 0; border-bottom: 1px solid #21262d; line-height: 1.4; }
-.issue-headlines li:last-child { border-bottom: none; }
-.issue-headlines li::before { content: '›'; color: var(--accent, #58a6ff); margin-right: 6px; }
-.no-headlines { font-size: 12px; color: #484f58; font-style: italic; }
-
-/* ── Load more ── */
-.load-more-btn {
-  display: block;
-  margin: 24px auto;
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #e6edf3;
-  padding: 10px 28px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-.load-more-btn:hover { background: #30363d; }
-
-/* ── Empty / error ── */
-.empty { text-align: center; padding: 60px 20px; color: #7d8590; font-size: 15px; }
-.error { text-align: center; padding: 40px; color: #f85149; }
-
-/* ── Wayback badge ── */
-.wayback-badge {
-  display: inline-block;
-  background: rgba(88,166,255,0.1);
-  color: #58a6ff;
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 8px;
-  font-weight: 600;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-header { background: linear-gradient(135deg, #0d1117 0%, #1a7a3a22 100%); border-bottom: 2px solid #1a7a3a; }
-.decade-pill.active { background: #1a7a3a22; border-color: #3fb950; color: white; }
+        .year-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #1a4d2e, #1a7a3a);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 2px;
+            user-select: none;
+        }
+        .year-header:hover { background: linear-gradient(135deg, #155d2e, #1a5f2e); }
+        .year-title { font-size: 18px; font-weight: 700; margin-right: 8px; }
+        .year-count { 
+            background: rgba(0,0,0,0.2); 
+            padding: 4px 12px; 
+            border-radius: 14px; 
+            font-size: 13px; 
+        }
+        .pub-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0 8px;
+        }
+        .issues-container { display: none; }
+        .year-section.open .issues-container { display: block; }
+        .year-section.open .year-header { border-radius: 8px 8px 0 0; }
 </style>
 
-<style id="wu-clean">
-* { box-sizing: border-box; }
-body { 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Georgia, serif; 
-  max-width: 1200px; margin: 0 auto; padding: 20px; 
-  background: #f8f9fa; color: #333; 
-}
-a { color: #1a5276; text-decoration: none; }
-a:hover { color: #2e86c1; text-decoration: underline; }
-h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; margin-bottom: 10px; }
-.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
-.stats-bar { 
-  display: flex; gap: 12px; flex-wrap: wrap;
-  background: #1a3c6e; padding: 12px 18px; border-radius: 8px; 
-  margin-bottom: 20px; 
-}
-.stat-item { color: white; font-size: 13px; }
-.stat-item strong { color: #90caf9; }
-.controls { 
-  background: white; border: 1px solid #dee2e6; border-radius: 8px;
-  padding: 12px 16px; margin-bottom: 16px;
-  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-}
-.controls input { 
-  border: 1px solid #ccc; border-radius: 6px; padding: 7px 12px; 
-  font-size: 14px; width: 240px; 
-}
-.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.decade-pill { 
-  background: #e9ecef; border: 1px solid #dee2e6; color: #495057;
-  padding: 4px 14px; border-radius: 14px; font-size: 12px; cursor: pointer;
-  border: none; font-family: inherit;
-}
-.decade-pill:hover, .decade-pill.active { background: #1a3c6e; color: white; }
-.year-section { margin-bottom: 12px; }
-.year-header { 
-  background: #2d5a9e; color: white; padding: 10px 16px; border-radius: 8px;
-  cursor: pointer; font-size: 15px; font-weight: 600;
-  display: flex; justify-content: space-between; align-items: center;
-  user-select: none;
-}
-.year-header:hover { background: #1a3c6e; }
-.year-body { background: white; border: 1px solid #dee2e6; border-radius: 0 0 8px 8px; display: none; }
-.year-section.open .year-body { display: block; }
-.year-section.open .year-header { border-radius: 8px 8px 0 0; }
-.issue-row { 
-  display: flex; align-items: center; gap: 12px;
-  padding: 9px 16px; border-bottom: 1px solid #f0f0f0; 
-  font-size: 14px;
-}
-.issue-row:last-child { border-bottom: none; }
-.issue-row:hover { background: #f8f9fa; }
-.issue-num { color: #999; font-size: 12px; min-width: 30px; }
-.issue-date { color: #1a3c6e; font-weight: 600; min-width: 160px; font-size: 13px; }
-.issue-title { color: #333; flex: 1; }
-.issue-link { color: #2e86c1; font-size: 12px; white-space: nowrap; }
-</style>
+
 </head>
 <body>
     <h1>📰 IDG World Update Archive</h1>
@@ -276,7 +149,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2018</span>
+                    <span class="year-title">2018</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">26 issues</span>
             </div>
@@ -523,7 +396,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2017</span>
+                    <span class="year-title">2017</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">38 issues</span>
             </div>
@@ -878,7 +751,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2016</span>
+                    <span class="year-title">2016</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">45 issues</span>
             </div>
@@ -1296,7 +1169,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2015</span>
+                    <span class="year-title">2015</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">45 issues</span>
             </div>
@@ -1714,7 +1587,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2014</span>
+                    <span class="year-title">2014</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">45 issues</span>
             </div>
@@ -2132,7 +2005,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2013</span>
+                    <span class="year-title">2013</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">41 issues</span>
             </div>
@@ -2514,7 +2387,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2012</span>
+                    <span class="year-title">2012</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">40 issues</span>
             </div>
@@ -2887,7 +2760,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2011</span>
+                    <span class="year-title">2011</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">37 issues</span>
             </div>
@@ -3233,7 +3106,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2010</span>
+                    <span class="year-title">2010</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">43 issues</span>
             </div>
@@ -3633,7 +3506,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2009</span>
+                    <span class="year-title">2009</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">36 issues</span>
             </div>
@@ -3970,7 +3843,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2008</span>
+                    <span class="year-title">2008</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">44 issues</span>
             </div>
@@ -4379,7 +4252,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2007</span>
+                    <span class="year-title">2007</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">40 issues</span>
             </div>
@@ -4752,7 +4625,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2006</span>
+                    <span class="year-title">2006</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">41 issues</span>
             </div>
@@ -5134,7 +5007,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2005</span>
+                    <span class="year-title">2005</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">42 issues</span>
             </div>
@@ -5525,7 +5398,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2004</span>
+                    <span class="year-title">2004</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">41 issues</span>
             </div>
@@ -5907,7 +5780,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2003</span>
+                    <span class="year-title">2003</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">41 issues</span>
             </div>
@@ -6289,7 +6162,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2002</span>
+                    <span class="year-title">2002</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">42 issues</span>
             </div>
@@ -6680,7 +6553,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2001</span>
+                    <span class="year-title">2001</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">49 issues</span>
             </div>
@@ -7134,7 +7007,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">2000</span>
+                    <span class="year-title">2000</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">48 issues</span>
             </div>
@@ -7579,7 +7452,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1999</span>
+                    <span class="year-title">1999</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">50 issues</span>
             </div>
@@ -8042,7 +7915,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1998</span>
+                    <span class="year-title">1998</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">50 issues</span>
             </div>
@@ -8505,7 +8378,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1997</span>
+                    <span class="year-title">1997</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">48 issues</span>
             </div>
@@ -8950,7 +8823,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1996</span>
+                    <span class="year-title">1996</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">52 issues</span>
             </div>
@@ -9431,7 +9304,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1995</span>
+                    <span class="year-title">1995</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">50 issues</span>
             </div>
@@ -9894,7 +9767,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1994</span>
+                    <span class="year-title">1994</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">46 issues</span>
             </div>
@@ -10321,7 +10194,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1993</span>
+                    <span class="year-title">1993</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">50 issues</span>
             </div>
@@ -10784,7 +10657,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1992</span>
+                    <span class="year-title">1992</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">49 issues</span>
             </div>
@@ -11238,7 +11111,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1991</span>
+                    <span class="year-title">1991</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">47 issues</span>
             </div>
@@ -11674,7 +11547,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1990</span>
+                    <span class="year-title">1990</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">38 issues</span>
             </div>
@@ -12029,7 +11902,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1989</span>
+                    <span class="year-title">1989</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">28 issues</span>
             </div>
@@ -12294,7 +12167,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1988</span>
+                    <span class="year-title">1988</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">39 issues</span>
             </div>
@@ -12658,7 +12531,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1987</span>
+                    <span class="year-title">1987</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">45 issues</span>
             </div>
@@ -13076,7 +12949,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1986</span>
+                    <span class="year-title">1986</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">47 issues</span>
             </div>
@@ -13512,7 +13385,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1985</span>
+                    <span class="year-title">1985</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">51 issues</span>
             </div>
@@ -13984,7 +13857,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1984</span>
+                    <span class="year-title">1984</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">42 issues</span>
             </div>
@@ -14375,7 +14248,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1983</span>
+                    <span class="year-title">1983</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">33 issues</span>
             </div>
@@ -14685,7 +14558,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1980</span>
+                    <span class="year-title">1980</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">2 issues</span>
             </div>
@@ -14716,7 +14589,7 @@ h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; mar
             <div class="year-header" onclick="toggleYear(this)">
                 <div style="display: flex; align-items: center;">
                     <span class="expand-icon">▶</span>&nbsp;&nbsp;
-                    <span class="year-title">1979</span>
+                    <span class="year-title">1979</span><span class="pub-label">IDG World Update</span>
                 </div>
                 <span class="year-count">8 issues</span>
             </div>
