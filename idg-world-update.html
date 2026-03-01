@@ -189,61 +189,63 @@ select:focus, input:focus { outline: none; border-color: #58a6ff; }
 header { background: linear-gradient(135deg, #0d1117 0%, #1a7a3a22 100%); border-bottom: 2px solid #1a7a3a; }
 .decade-pill.active { background: #1a7a3a22; border-color: #3fb950; color: white; }
 </style>
-<style id="wu-readability">
-/* Links */
-a { color: #c9d1d9 !important; text-decoration: none; }
-a:hover { color: #3fb950 !important; text-decoration: underline; }
 
-/* Year section headers */
-h2 { 
-  color: #3fb950 !important; 
-  font-size: 16px !important;
-  border-bottom: 1px solid #30363d;
-  padding: 12px 0 8px;
-  margin: 20px 0 8px;
-  cursor: pointer;
+<style id="wu-clean">
+* { box-sizing: border-box; }
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Georgia, serif; 
+  max-width: 1200px; margin: 0 auto; padding: 20px; 
+  background: #f8f9fa; color: #333; 
 }
-
-/* Issue entries - make them card-like */
-.issue, li, .entry {
-  background: #161b22;
-  border: 1px solid #21262d;
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin: 6px 0;
-  list-style: none;
-  transition: border-color 0.15s;
+a { color: #1a5276; text-decoration: none; }
+a:hover { color: #2e86c1; text-decoration: underline; }
+h1 { color: #1a3c6e; border-bottom: 3px solid #2d5a9e; padding-bottom: 15px; margin-bottom: 10px; }
+.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+.stats-bar { 
+  display: flex; gap: 12px; flex-wrap: wrap;
+  background: #1a3c6e; padding: 12px 18px; border-radius: 8px; 
+  margin-bottom: 20px; 
 }
-.issue:hover, li:hover, .entry:hover { border-color: #3fb950; }
-
-/* Dates */
-.date, .issue-date, b, strong { color: #3fb950 !important; font-size: 12px; }
-
-/* Headlines */
-.headline, h3, h4 { color: #e6edf3 !important; font-size: 14px; line-height: 1.5; margin: 4px 0; }
-
-/* Container */
-#content, .content, main, .container { 
-  max-width: 900px; 
-  margin: 0 auto; 
-  padding: 16px 20px; 
+.stat-item { color: white; font-size: 13px; }
+.stat-item strong { color: #90caf9; }
+.controls { 
+  background: white; border: 1px solid #dee2e6; border-radius: 8px;
+  padding: 12px 16px; margin-bottom: 16px;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
 }
-
-/* Search */
-input[type="text"] {
-  background: #161b22 !important;
-  border: 1px solid #30363d !important;
-  color: #e6edf3 !important;
-  padding: 8px 14px !important;
-  border-radius: 6px !important;
+.controls input { 
+  border: 1px solid #ccc; border-radius: 6px; padding: 7px 12px; 
+  font-size: 14px; width: 240px; 
 }
-
-/* Remove white backgrounds */
-body { background: #0d1117 !important; }
-* { background-color: inherit; }
-.issue, li, .entry { background-color: #161b22 !important; }
-
-p, div, td { color: #c9d1d9; }
+.decade-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.decade-pill { 
+  background: #e9ecef; border: 1px solid #dee2e6; color: #495057;
+  padding: 4px 14px; border-radius: 14px; font-size: 12px; cursor: pointer;
+  border: none; font-family: inherit;
+}
+.decade-pill:hover, .decade-pill.active { background: #1a3c6e; color: white; }
+.year-section { margin-bottom: 12px; }
+.year-header { 
+  background: #2d5a9e; color: white; padding: 10px 16px; border-radius: 8px;
+  cursor: pointer; font-size: 15px; font-weight: 600;
+  display: flex; justify-content: space-between; align-items: center;
+  user-select: none;
+}
+.year-header:hover { background: #1a3c6e; }
+.year-body { background: white; border: 1px solid #dee2e6; border-radius: 0 0 8px 8px; display: none; }
+.year-section.open .year-body { display: block; }
+.year-section.open .year-header { border-radius: 8px 8px 0 0; }
+.issue-row { 
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 16px; border-bottom: 1px solid #f0f0f0; 
+  font-size: 14px;
+}
+.issue-row:last-child { border-bottom: none; }
+.issue-row:hover { background: #f8f9fa; }
+.issue-num { color: #999; font-size: 12px; min-width: 30px; }
+.issue-date { color: #1a3c6e; font-weight: 600; min-width: 160px; font-size: 13px; }
+.issue-title { color: #333; flex: 1; }
+.issue-link { color: #2e86c1; font-size: 12px; white-space: nowrap; }
 </style>
 </head>
 <body>
