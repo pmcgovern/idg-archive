@@ -14693,11 +14693,6 @@
 
     </div>
     
-    <div class="credits">
-        Archive digitized from Archive.org. Headlines reviewed and corrected by Lourdes G. (Fancy Hands) 
-        and Gen M. Quality assured January 2026.
-    </div>
-    
     <script>
         function toggleYear(header) {
             const section = header.parentElement;
@@ -14790,5 +14785,17 @@
             }
         }
     </script>
+<script>
+  function initWU() {
+    buildEraPillsWU();
+    sortAndRender();
+    filterAll();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWU);
+  } else {
+    initWU();
+  }
+</script>
 </body>
 </html>
