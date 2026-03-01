@@ -303,38 +303,47 @@
                 updateResultsInfo();
                 return;
             }
-            // Group by year for accordion
+
+            const searching = currentSearch.length > 0;
+
+            // Group by year
             const byYear = {};
             filteredIssues.forEach(i => {
                 const y = i.date ? i.date.substring(0,4) : '?';
                 if (!byYear[y]) byYear[y] = [];
                 byYear[y].push(i);
             });
-            const years = Object.keys(byYear).sort();
+
+            // Sort years based on sort control
+            const sortVal = document.getElementById('sort')?.value || 'asc';
+            const years = Object.keys(byYear).sort((a, b) => sortVal === 'desc' ? b - a : a - b);
+
             years.forEach(year => {
                 const issues = byYear[year];
+                const issueWord = issues.length === 1 ? 'issue' : 'issues';
+                const autoOpen = searching; // open all matching years when searching
+
                 const section = document.createElement('div');
                 section.className = 'volume-section';
 
-                // Header
                 const header = document.createElement('div');
                 header.className = 'volume-header';
                 header.onclick = function() { toggleVolume(this); };
                 header.innerHTML = `
                   <div class="volume-left">
-                    <span class="expand-icon">▶</span>
+                    <span class="expand-icon">${autoOpen ? '▼' : '▶'}</span>
                     <span class="volume-title">${year}</span>
                     <span class="pub-label">Computerworld</span>
                   </div>
                   <div class="volume-right">
-                    <span class="volume-count">${issues.length} issues</span>
+                    <span class="volume-count">${issues.length} ${issueWord}</span>
                     <span class="browse-btn">▼ Click to Browse</span>
                   </div>`;
 
-                // Content grid
                 const content = document.createElement('div');
                 content.className = 'volume-content';
-                content.style.display = 'none';
+                content.style.display = autoOpen ? 'block' : 'none';
+
                 const innerGrid = document.createElement('div');
                 innerGrid.className = 'issues-grid';
                 issues.forEach(i => {
@@ -346,6 +355,7 @@
                 section.appendChild(content);
                 grid.appendChild(section);
             });
+
             displayedCount = filteredIssues.length;
             updateResultsInfo();
             document.getElementById('load-more').style.display = 'none';
