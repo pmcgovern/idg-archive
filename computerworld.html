@@ -229,27 +229,30 @@
                 .filter(([d]) => d.match(/^(19|20)/))
                 .sort((a, b) => a[0].localeCompare(b[0]));
             const container = document.getElementById('decade-pills');
-            
-            function activatePill(btn) {
-                document.querySelectorAll('.decade-pill').forEach(p => p.classList.remove('active'));
-                btn.classList.add('active');
+            container.innerHTML = '';
+
+            const ACTIVE_STYLE = 'background:#1a2d5a;color:#fff;border-color:#1a2d5a;font-weight:700;';
+            const IDLE_STYLE   = 'background:#fff;color:#333;border-color:#bdc3c7;font-weight:600;';
+
+            function activatePill(clicked) {
+                container.querySelectorAll('button').forEach(b => b.setAttribute('style', IDLE_STYLE));
+                clicked.setAttribute('style', ACTIVE_STYLE);
                 applyFilters();
             }
 
-            const allBtn = document.createElement('button');
-            allBtn.className = 'decade-pill active';
-            allBtn.dataset.decade = 'all';
-            allBtn.textContent = 'All';
-            allBtn.onclick = () => activatePill(allBtn);
-            container.appendChild(allBtn);
-
-            sorted.forEach(([decade, count]) => {
+            function makePill(label, decade, isActive) {
                 const btn = document.createElement('button');
                 btn.className = 'decade-pill';
                 btn.dataset.decade = decade;
-                btn.textContent = decade + ' (' + count + ')';
+                btn.textContent = label;
+                btn.setAttribute('style', isActive ? ACTIVE_STYLE : IDLE_STYLE);
                 btn.onclick = () => activatePill(btn);
-                container.appendChild(btn);
+                return btn;
+            }
+
+            container.appendChild(makePill('All', 'all', true));
+            sorted.forEach(([decade, count]) => {
+                container.appendChild(makePill(decade + ' (' + count + ')', decade, false));
             });
         }
 
